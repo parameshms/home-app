@@ -1,0 +1,22 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+  pre_build:
+    commands:
+      - npm install 
+  build:
+    commands:
+      - npm run build
+      - ls -la
+  post_build:
+    commands:
+      - aws s3 sync ./build s3://$BUCKET --delete 
+      - NAME=$(echo "$BUCKET" | awk '{gsub("ruse-", ""); print}')
+      - CLOUDFRONT_ID=$(aws cloudfront list-distributions --output text --query 'DistributionList.Items[*].[Id,Aliases.Items[0]]' | grep $NAME | awk '{print $1}')
+      - echo $CLOUDFRONT_ID
+      - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_ID --paths "/*" 
+
+
