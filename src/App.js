@@ -74,14 +74,14 @@ const App = () => {
           <form className="space-y-6" onSubmit={handleOnSubmit}>
             <div>
               <label className="block text-[12px] font-base leading-6 text-gray-900">
-                Email
+                Username
               </label>
               <div className="mt-2">
                 <input
                   id="email"
                   type="text"
                   required
-                  placeholder="Enter your email"
+                  placeholder="Enter your username"
                   onChange={(e)=>setEmail(e.target.value)}
                   className="w-full border rounded-md py-2 text-gray-900 shadow-sm  placeholder:text-gray-400 outline-none p-2 text-[10px] font-base"
                 />
