@@ -25,15 +25,15 @@ import OrderMiniBitesPage from "./components/MiniBites/OrderMiniBitesPage";
 import ConfirmMiniBitesOrderPage from "./components/MiniBites/ConfirmMiniBitesOrderPage";
 import { Provider } from "react-redux";
 import appStore from "./constants/appStore";
-import RoomSummary from "./components/CheckOut/RoomSummary";
-import StayCompletePage from "./components/CheckOut/StayCompletePage";
+// import RoomSummary from "./components/CheckOut/RoomSummary";
+// import StayCompletePage from "./components/CheckOut/StayCompletePage";
 import AllRequestPage from "./components/AllRequestPage";
 import StayExtension from "./components/StayExtension";
-import AmenitiesPage from "./components/Amenities/AmenitiesPage";
-import TravelAndTransitPage from "./components/TravelAndTransit/TravelAndTransitPage";
+// import AmenitiesPage from "./components/Amenities/AmenitiesPage";
+// import TravelAndTransitPage from "./components/TravelAndTransit/TravelAndTransitPage";
 import FeedbackSuccessPage from "./components/FeedbackSuccessPage";
 import ExtendStaySuccessPage from "./components/ExtendStaySuccessPage";
-import ExtraServicesPage from "./components/ExtraServices/ExtraServicesPage";
+// import ExtraServicesPage from "./components/ExtraServices/ExtraServicesPage";
 import ScrollToTop from "./constants/ScrollToTopPage";
 import HousehelpDetailsPage from "./components/HouseHelp/Househelp";
 import Register from "./components/Register";
@@ -115,22 +115,22 @@ const Root = () => {
                 path="/groceries/out_of_stock"
                 element={<ProtectedRoute element={<OutOfStockGroceries />} roleRequired="Owner" />}
               />
-              <Route
+              {/* <Route
                 path="/checkout/roomSummary"
                 element={<ProtectedRoute element={<RoomSummary />} roleRequired="Owner" />}
-              />
-              <Route
+              /> */}
+              {/* <Route
                 path="/checkout/roomSummary/stayComplete"
                 element={<ProtectedRoute element={<StayCompletePage />} roleRequired="Owner" />}
-              />
+              /> */}
               <Route
                 path="/checkout/roomSummary/stayComplete/feedbackSuccess"
                 element={<ProtectedRoute element={<FeedbackSuccessPage />} roleRequired="Owner" />}
               />
-              <Route
+              {/* <Route
                 path="/extraServices"
                 element={<ProtectedRoute element={<ExtraServicesPage />} roleRequired="Owner" />}
-              />
+              /> */}
               <Route
                 path="/requestBox"
                 element={<ProtectedRoute element={<AllRequestPage />} roleRequired="Owner" />}
@@ -143,14 +143,14 @@ const Root = () => {
                 path="/electricity"
                 element={<ProtectedRoute element={<EnergyConsuption />} roleRequired="Owner" />}
               />
-              <Route
+              {/* <Route
                 path="/amenities"
                 element={<ProtectedRoute element={<AmenitiesPage />} roleRequired="Owner" />}
-              />
-              <Route
+              /> */}
+              {/* <Route
                 path="/travelAndTransit"
                 element={<ProtectedRoute element={<TravelAndTransitPage />} roleRequired="Owner" />}
-              />
+              /> */}
               <Route
                 path="/orderfood"
                 element={<ProtectedRoute element={<OrderFoodPage />} roleRequired="Owner" />}

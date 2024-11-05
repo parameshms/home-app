@@ -21,6 +21,7 @@ const EnergyConsumption = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const API = process.env.REACT_APP_API
   const [newEnergyData, setNewEnergyData] = useState({
     RR_No: "",
     accId: "",
@@ -57,7 +58,7 @@ const EnergyConsumption = () => {
     const fetchConsumptionData = async () => {
       const token = localStorage.getItem("token");
       try {
-        const response = await fetch("http://127.0.0.1:5053/get_last_three_months", {
+        const response = await fetch(`${API}/get_last_three_months`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -85,7 +86,7 @@ const EnergyConsumption = () => {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5053/energyConsumption/addData",
+        `${API}/energyConsumption/addData`,
         newEnergyData,
         {
           headers: {
