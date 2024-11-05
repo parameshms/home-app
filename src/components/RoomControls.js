@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import leftArrowIcon from "../assests/leftArrow.svg";
 import lightIcon from "../assests/lightIcon.svg";
 import { useNavigate } from "react-router-dom";
+const API = process.env.REACT_APP_API
 
 const RoomControls = () => {
   const [roles, setRoles] = useState([]); 
@@ -13,7 +14,7 @@ const RoomControls = () => {
 
   const fetchRoles = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:5051/househelp/categories/all"); 
+      const response = await fetch(`${API}/househelp/categories/all`); 
       const data = await response.json(); 
       setRoles(data); 
       console.log(data); 

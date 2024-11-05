@@ -16,7 +16,7 @@ export default function Register() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const AUTH_API = process.env.REACT_APP_AUTH_API
+  const AUTH_API = process.env.REACT_APP_API
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();

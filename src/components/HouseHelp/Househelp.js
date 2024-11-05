@@ -9,6 +9,7 @@ const HousehelpDetailsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const API = process.env.REACT_APP_API
   const [newHouseHelp, setNewHouseHelp] = useState({
     name: "",
     phone_number: "",
@@ -38,7 +39,7 @@ const HousehelpDetailsPage = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          `http://127.0.0.1:5051/househelp/all?role=${role}`,
+          `${API}/househelp/all?role=${role}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -73,7 +74,7 @@ const HousehelpDetailsPage = () => {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.post(
-        "http://127.0.0.1:5051/househelp/add",
+        `${API}/househelp/add`,
         {
           ...newHouseHelp,
           role,

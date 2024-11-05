@@ -4,7 +4,7 @@ import logo from "./assests/RuseLogo.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const App = () => {
-  const AUTH_API = process.env.REACT_APP_AUTH_API
+  const AUTH_API = process.env.REACT_APP_API
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
  
@@ -18,7 +18,7 @@ const App = () => {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(AUTH_API,"aaaaa")
+
       const response = await fetch(
         `${AUTH_API}/login`,
         {

@@ -25,13 +25,13 @@ const HomePage = () => {
   const username = localStorage.getItem('username');
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
+  const API = process.env.REACT_APP_API
   
-  console.log(output);
 
   useEffect(() => {
     const fetchHomeDetails = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:1212/home', {
+        const response = await axios.get(`${API}/home`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }

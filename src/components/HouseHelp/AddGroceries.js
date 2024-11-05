@@ -7,11 +7,12 @@ const AddGroceries = () => {
   const [addedItems, setAddedItems] = useState([]);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const API = process.env.REACT_APP_API
 
   const token = localStorage.getItem('token');
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8081/groceries', {
+    axios.get(`${API}/groceries`, {
       headers: {
         Authorization: `Bearer ${token}` 
       }
@@ -27,7 +28,7 @@ const AddGroceries = () => {
   const handleAddItem = (data) => {
     const existingItem = addedItems.find((item) => item.name === data.name);
     if (!existingItem) {
-      axios.post('http://127.0.0.1:8081/groceries/add', 
+      axios.post(`${API}/groceries/add`, 
         { _id: data._id }, 
         {
           headers: {

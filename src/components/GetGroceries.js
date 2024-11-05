@@ -5,7 +5,7 @@ const OutOfStockGroceries = () => {
   const [outOfStockGroceries, setOutOfStockGroceries] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
-  
+  const API = process.env.REACT_APP_API
   const token = localStorage.getItem('token');
  
 
@@ -15,7 +15,7 @@ const OutOfStockGroceries = () => {
 
   const fetchOutOfStockGroceries = () => {
     setLoading(true);
-    axios.get('http://127.0.0.1:8081/groceries/outofstock', {
+    axios.get(`${API}/groceries/outofstock`, {
     
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -31,7 +31,7 @@ const OutOfStockGroceries = () => {
 
   const handleLaterClick = (grocery) => {
     
-    axios.delete('http://127.0.0.1:8081/groceries/outofstock/delete', {
+    axios.delete(`${API}/groceries/outofstock/delete`, {
       data: { _id: grocery._id },
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -47,7 +47,7 @@ const OutOfStockGroceries = () => {
 
   const handleOrderClick = (grocery) => {
  
-    axios.put('http://127.0.0.1:8081/groceries/outofstock/update', 
+    axios.put(`${API}/groceries/outofstock/update`, 
       { _id: grocery._id },
       { headers: { Authorization: `Bearer ${token}` } }
     )
