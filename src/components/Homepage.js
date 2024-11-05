@@ -1,4 +1,5 @@
 
+
 import roomImg from "../assests/roomImg.png";
 import rightArrowImg from "../assests/rightArrow.svg";
 import houseKeepingIcon from "../assests/houseKeepingIcon.svg";
@@ -25,9 +26,8 @@ const HomePage = () => {
   const username = localStorage.getItem('username');
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
-  const API = process.env.REACT_APP_API
+  const API = process.env.REACT_APP_API;
   
-
   useEffect(() => {
     const fetchHomeDetails = async () => {
       try {
@@ -69,6 +69,14 @@ const HomePage = () => {
     });
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('username');
+    localStorage.removeItem('token');
+    localStorage.removeItem('homeId')
+    localStorage.removeItem('role')
+    navigate('/');
+  };
+
   const splitOutput = output.trim().split('\n');
 
   const openModal = () => {
@@ -85,6 +93,12 @@ const HomePage = () => {
         <div className="min-h-full font-poppins tracking-wide flex flex-col gap-2 p-2">
           <div className="flex justify-between items-start mt-4">
             <h2 className="font-semibold text-[18px]">My Home</h2>
+            <button 
+              onClick={handleLogout}
+              className="text-white bg-red-500 hover:bg-red-700 text-sm font-semibold py-1 px-2 rounded"
+            >
+              Logout
+            </button>
           </div>
           <div className="font-medium text-[16px]">
             Hello, {username}
@@ -103,7 +117,6 @@ const HomePage = () => {
               </div>
               <div className="flex flex-col">
                 <div className="mt-2 px-2 col-span-1 flex flex-col justify-center border-b h-1/2">
-                
                   <div className="font-semibold text-[14px] ml-2">
                     Flat No {homeDetails.flat}
                   </div>

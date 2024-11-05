@@ -56,16 +56,15 @@ const ProtectedRoute = ({ element, roleRequired, ...rest }) => {
     return <Navigate to="/" replace />;
   }
 
-  // If roleRequired is provided, check if the user has the correct role
+
   if (roleRequired && role !== roleRequired) {
-    // Allow "maid" or "cook" to access only /AddGroceries
+  
     if (role === "maid" || role === "cook") {
       return <Navigate to="/AddGroceries" replace />;
     }
     return <Navigate to="/" replace />;
   }
 
-  // If everything checks out, render the element
   return element;
 };
 
@@ -95,7 +94,12 @@ const Root = () => {
         {isMobile ? (
           isPortrait ? (
             <>
-              <Route path="/" element={<App />} />
+              {/* <Route path="/" element={<App/>} /> */}
+              {localStorage.getItem("token") ? (
+                <Route path="/" element={<Navigate to="/home" replace />} />
+              ) : (
+                <Route path="/" element={<App />} />
+              )}
               <Route path="/register" element={<Register />} />
               <Route path="/chart" element ={<PageViewsBarChart/>}/>
 
