@@ -4,27 +4,23 @@ import logo from "./assests/RuseLogo.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const App = () => {
-  const TOKEN_API_URL = process.env.REACT_APP_TOKEN_API_URL;
+  const AUTH_API = process.env.REACT_APP_AUTH_API
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [token, setToken] = useState("");
+ 
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const [decrypt, setDecrypt] = useState("");
-  const [roomNo, setRoomNo] = useState("");
-  const [hotelName, setHotelName] = useState("");
-  const [rhid, setRhid] = useState("");
 
  
 
+ 
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     try {
+      console.log(AUTH_API,"aaaaa")
       const response = await fetch(
-        'http://127.0.0.1:5052/login',
+        `${AUTH_API}/login`,
         {
           method: "POST",
           headers: {
