@@ -18,6 +18,7 @@ const AddGroceries = () => {
       }
     })
       .then((response) => {
+        console.log(response.data)
         setGroceries(response.data.groceries);
       })
       .catch((error) => {

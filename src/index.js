@@ -40,8 +40,15 @@ import Register from "./components/Register";
 import AddGroceries from "./components/HouseHelp/AddGroceries";
 import OutOfStockGroceries from "./components/GetGroceries";
 import PageViewsBarChart from "./components/PageViewsBarChart";
+import AddFamily from "./components/AddFamily";
+import ApprovalPending from "./components/ApprovalPending";
+import UtilitiesPage from "./components/UtilitiesPage";
+import GasConsumption from "./components/GasConsumption";
+import WaterConsumption from "./components/WaterConsumption";
+import Reminders from "./components/Reminders";
+import AddHousehelp from "./components/HouseHelp/AddHousehelp";
 
-// Custom hook for authentication and role checking
+
 const useAuth = () => {
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
@@ -51,7 +58,6 @@ const useAuth = () => {
 const ProtectedRoute = ({ element, roleRequired, ...rest }) => {
   const { token, role } = useAuth();
 
-  // Redirect to login if token is not present
   if (!token) {
     return <Navigate to="/" replace />;
   }
@@ -59,7 +65,7 @@ const ProtectedRoute = ({ element, roleRequired, ...rest }) => {
 
   if (roleRequired && role !== roleRequired) {
   
-    if (role === "maid" || role === "cook") {
+    if (role === "maid" || role === "Cook") {
       return <Navigate to="/AddGroceries" replace />;
     }
     return <Navigate to="/" replace />;
@@ -103,8 +109,14 @@ const Root = () => {
               <Route path="/register" element={<Register />} />
               <Route path="/chart" element ={<PageViewsBarChart/>}/>
 
-              {/* Allow everyone to access AddGroceries */}
+              
               <Route path="/AddGroceries" element={<AddGroceries />} />
+
+              <Route path="/Addfamily" element={<AddFamily />} />
+              <Route path="/approval" element={<ApprovalPending />} />
+              <Route path="/utilities" element={<UtilitiesPage/>} />
+              <Route path="/reminders" element = {<Reminders/>}/>
+              <Route path="/addHouseHelps" element = {<AddHousehelp/>}/>
 
               {/* Owner-only routes */}
               <Route
@@ -137,15 +149,23 @@ const Root = () => {
               /> */}
               <Route
                 path="/requestBox"
-                element={<ProtectedRoute element={<AllRequestPage />} roleRequired="Owner" />}
+                element={<AllRequestPage /> }
               />
               <Route
                 path="/househelps"
-                element={<ProtectedRoute element={<RoomControls />} roleRequired="Owner" />}
+                element={<RoomControls />}
               />
               <Route
                 path="/electricity"
-                element={<ProtectedRoute element={<EnergyConsuption />} roleRequired="Owner" />}
+                element={<EnergyConsuption />}
+              />
+              <Route
+                path="/gas"
+              element={<GasConsumption />}
+              />
+              <Route
+                path="/water"
+                element={<ProtectedRoute element={< WaterConsumption/>} roleRequired="Owner" />}
               />
               {/* <Route
                 path="/amenities"
