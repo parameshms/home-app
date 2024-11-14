@@ -14,7 +14,6 @@ import { BarChart } from '@mui/x-charts/BarChart';
 import { useTheme } from '@mui/material/styles';
 
 
-
 const EnergyConsumption = () => {
   const [consumptionData, setConsumptionData] = useState([]);
   const [graphData, setGraphData] = useState(null);
@@ -46,7 +45,6 @@ const EnergyConsumption = () => {
     
   });
 
-
   const theme = useTheme();
   const colorPalette = [
     // (theme.vars || theme).palette.primary.dark,
@@ -66,7 +64,7 @@ const EnergyConsumption = () => {
         });
         const data = await response.json();
         if (data.error) {
-          setError(data.message || "Failed to load data");
+          setError(data.error || "Failed to load data");
         } else {
           setConsumptionData(data);
           formatGraphData(data);
@@ -396,7 +394,6 @@ const EnergyConsumption = () => {
                   />
                 </div>
 
-
                 
 
                
@@ -477,4 +474,19 @@ const EnergyConsumption = () => {
 };
 
 export default EnergyConsumption;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

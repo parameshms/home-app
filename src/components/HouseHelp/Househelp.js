@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import leftArrowIcon from "../../assests/leftArrow.svg";
 
 const HousehelpDetailsPage = () => {
-  const { role } = useParams(); // Get the role from the URL
+  const { role } = useParams();
   const [househelpData, setHousehelpData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

@@ -7,20 +7,15 @@ const App = () => {
   const AUTH_API = process.env.REACT_APP_API
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
- 
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
  
-
- 
-
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     try {
-
       const response = await fetch(
-        `${AUTH_API}/login`,
+        `${AUTH_API}/login`,  // Fixed the missing backticks and quote in the URL
         {
           method: "POST",
           headers: {
@@ -32,25 +27,41 @@ const App = () => {
           }),
         }
       );
-
       const data = await response.json();
-
-
 
       if (data?.error) {
         setError(data?.error);
-      } else {
-        navigate(`/home`);
-   
+      } else if (data?.flag === true) {
+        // If flag is true, navigate to /home
+        navigate("/home");
+
+        // Store the necessary data in localStorage
         localStorage.setItem("token", data?.token);
         localStorage.setItem("username", data?.username);
         localStorage.setItem("role", data?.role);
-        localStorage.setItem('homeId',data?.homeId)
+        localStorage.setItem('flag', data?.flag);
+      } else if ((data?.role === "maid" || data?.role === "Cook")) {
+        // If flag is false and role is "maid" or "Cook", navigate to /AddGroceries
+        navigate("/AddGroceries");
+
+        // Store the necessary data in localStorage
+        localStorage.setItem("token", data?.token);
+        localStorage.setItem("username", data?.username);
+        localStorage.setItem("role", data?.role);
+      } else if (data?.flag === false && data?.role === "Owner") {
+        // If flag is false and role is "Owner", navigate to /approval
+        navigate("/approval");
+        localStorage.setItem('flag', data?.flag);
+      } else {
+        // Default fallback
+        setError("Unexpected response");
       }
+      
     } catch (err) {
       setError("An error occurred. Please try again later.");
     }
-  };
+};
+
 
   return (
     <>

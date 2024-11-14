@@ -1,5 +1,3 @@
-
-
 import roomImg from "../assests/roomImg.png";
 import rightArrowImg from "../assests/rightArrow.svg";
 import houseKeepingIcon from "../assests/houseKeepingIcon.svg";
@@ -8,16 +6,16 @@ import requestBoxIcon from "../assests/requestBoxIcon.svg";
 import foodIcon from "../assests/foodIcon.svg";
 import deviceControlIcon from "../assests/deviceControlIcon.svg";
 import mic from "../assests/mic.png";
-import io from 'socket.io-client';
-import axios from 'axios'; 
-
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
 import ModalHomePage from "./ModalHomePage";
+import axios from "axios";
+import moment from "moment";
 
 
-const HomePage = () => {
+
+
+const HomePage = () => { 
 
   const [showModal, setShowModal] = useState(false);
   const [output, setOutput] = useState("");
@@ -43,38 +41,152 @@ const HomePage = () => {
     };
 
     fetchHomeDetails();
-  }, [token]);
+  }, [token,API]);
 
-  useEffect(() => {
-    const newSocket = io(`http://127.0.0.1:8080`);
-    setSocket(newSocket);
 
-    newSocket.on('update', (data) => {
-        const formattedMessage = JSON.stringify(data.message, null, 2);
-        setOutput((prevOutput) => prevOutput + formattedMessage + '\n');
-    });
+ 
 
-    return () => {
-        newSocket.close();
+
+  const intents = {
+  
+    energy_consumption: [
+      "energy",
+      "consumption",
+      "units",
+      "energy consumption",
+      "last month energy consumption",
+      "previous month energy consumption",
+    ],
+  };
+
+  const predictIntent = (text) => {
+    text = text.toLowerCase();
+    for (const [intent, keywords] of Object.entries(intents)) {
+      for (const keyword of keywords) {
+        if (text.includes(keyword)) {
+          return { intent, command: keyword };
+        }
+      }
+    }
+    return { intent: "unknown", command: "" };
+  };
+
+  const extractMonth = (text) => {
+    text = text.toLowerCase();
+    const currentMonth = moment().month() + 1;
+    const currentYear = moment().year();
+
+    if (text.includes("current month")) {
+      return { month: currentMonth, year: currentYear };
+    } else if (text.includes("previous month") || text.includes("last month")) {
+      const previousMonth = currentMonth === 1 ? 12 : currentMonth - 1;
+      const previousYear = currentMonth === 1 ? currentYear - 1 : currentYear;
+      return { month: previousMonth, year: previousYear };
+    } else {
+      const monthNames = moment.months();
+      for (let i = 0; i < monthNames.length; i++) {
+        if (text.includes(monthNames[i].toLowerCase())) {
+          return { month: i + 1, year: currentYear };
+        }
+      }
+    }
+    return { month: null, year: null };
+  };
+  function speakText(text) {
+    
+    if ("speechSynthesis" in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      
+    
+      utterance.lang = "en-US";
+      utterance.rate = 1; // Speed
+      utterance.pitch = 1; // Pitch
+      
+    
+      window.speechSynthesis.speak(utterance);
+    } else {
+      console.error("Speech synthesis not supported in this browser.");
+    }
+  }
+
+  async function getConsumption(month,year) {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     };
-  }, []);
+    
+  
+    try {
+      const response = await axios.get(`http://127.0.0.1:5052/getConsumption`, {
+        headers,
+        params: { month, year }
+      });
+    
+      return response.data;
+        
+     
+    } catch (error) {
+      return { error: error.message };
+    }
+  }
 
   const handleVoice = () => {
-    setOutput(""); 
-    fetch('http://127.0.0.1:8080/start-main', { 
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
+    setOutput("");
+    try {
+      const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.start();
+  
+      recognition.onresult = async (event) => {
+        const speechText = event.results[0][0].transcript;
+        setOutput(speechText);
+        console.log("Speech Text:", speechText);
+  
+        const { intent, command } = predictIntent(speechText);
+        let responseText = `Detected intent: ${intent}, Command: ${command}`;
+  
+        if (intent === "energy_consumption") {
+          const { month, year } = extractMonth(speechText);
+          
+          try {
+            const res = await getConsumption(month, year);
+            console.log("Consumption Data:", res);
+  
+            if (!res.error) {
+              const units = res.unitsConsumed || "No data available";
+              console.log("Units Consumed:", units);
+              speakText(`${units} units consumed`);
+              responseText += `, Units Consumed: ${units}`;
+            } else {
+              console.log("Error:", res.error);
+              responseText += `, Error: ${res.error}`;
+            }
+          } catch (error) {
+            console.error("Error fetching consumption data:", error);
+            responseText += `, Error: ${error.message}`;
+          }
+        }
+  
+        setOutput(responseText);
+      };
+  
+      recognition.onspeechend = () => recognition.stop();
+  
+      recognition.onerror = (error) => {
+        console.error("Speech Recognition Error:", error);
+        setOutput("Speech recognition error. Please try again.");
+      };
+    } catch (error) {
+      console.error("Error with voice handling:", error);
+      setOutput("Error initializing voice recognition.");
+    }
   };
 
   const handleLogout = () => {
     localStorage.removeItem('username');
     localStorage.removeItem('token');
-    localStorage.removeItem('homeId')
+    localStorage.removeItem('flag')
     localStorage.removeItem('role')
-    navigate('/');
+    navigate('/',{ replace: true });
   };
 
   const splitOutput = output.trim().split('\n');
@@ -116,7 +228,7 @@ const HomePage = () => {
                 />
               </div>
               <div className="flex flex-col">
-                <div className="mt-2 px-2 col-span-1 flex flex-col justify-center border-b h-1/2">
+                <div className="mt-2 px-6 col-span-1 flex flex-col justify-center border-b h-1/2">
                   <div className="font-semibold text-[14px] ml-2">
                     Flat No {homeDetails.flat}
                   </div>
@@ -135,27 +247,45 @@ const HomePage = () => {
                 <div className="text-sm font-base">Household Management</div>
               </div>
             </Link>
-            <Link to="/orderFood">
+            <Link to="/Addfamily">
               <div className="col-span-1 flex flex-col justify-center items-center px-3 pt-2 border rounded-xl bg-white hover:bg-[#819b9b] gap-4 pb-4">
                 <img src={foodIcon} alt="" className="w-8 h-8 " />
-                <div className="text-sm font-base">Order Food</div>
+                <div className="text-sm font-base">Add Family</div>
               </div>
             </Link>
-            <Link to="/electricity">
-              <div className="col-span-1 flex flex-col justify-center items-center px-3 pt-2 border rounded-xl bg-white hover:bg-[#819b9b] gap-4 pb-4">
-                <img src={houseKeepingIcon} alt="" className="w-8 h-8 " />
-                <div className="text-sm font-base">Electricity</div>
-              </div>
-            </Link>
+      
             <Link to="/groceries/out_of_stock">
               <div className="col-span-1 flex flex-col justify-center items-center px-3 pt-2 border rounded-xl bg-white hover:bg-[#819b9b] gap-4 pb-4">
                 <img src={miniBitesIcon} alt="" className="w-8 h-8 " />
                 <div className="text-sm font-base">Groceries</div>
               </div>
             </Link>
+
+            <Link to="/utilities">
+              <div className="col-span-1 flex flex-col justify-center items-center px-3 pt-2 border rounded-xl bg-white hover:bg-[#819b9b] gap-4 pb-4">
+                <img src={miniBitesIcon} alt="" className="w-8 h-8 " />
+                <div className="text-sm font-base">Utilities</div>
+              </div>
+            </Link>
+
+
+            <Link to="/reminders">
+              <div className="col-span-1 flex flex-col justify-center items-center px-3 pt-2 border rounded-xl bg-white hover:bg-[#819b9b] gap-4 pb-4">
+                <img src={miniBitesIcon} alt="" className="w-8 h-8 " />
+                <div className="text-sm font-base">Add Reminders</div>
+              </div>
+            </Link>
+
+          </div>
+
+          <div className="flex justify-end items-end mt-8 mb-4" onClick={handleVoice}>
+            <div className={`max-w-xs p-2`}>
+              {output ? output : "Try saying 'Hey home'"}
+            </div>
+            <img src={mic} alt="microphone" className="w-10 h-10" />
           </div>
           
-          <div className="flex justify-end items-end mt-8 mb-4" onClick={handleVoice}>
+          {/* <div className="flex justify-end items-end mt-8 mb-4" onClick={handleVoice}>
             <div className={`max-w-xs p-2`}>
               {output ? (
                 splitOutput.map((line, index) => (
@@ -166,7 +296,7 @@ const HomePage = () => {
               )}
             </div>
             <img src={mic} alt="microphone" className="w-10 h-10" />
-          </div>
+          </div> */}
 
           <div className="flex flex-col items-end text-[10px]">
             <div>Powered by Rusé</div>
