@@ -99,7 +99,7 @@ const HomePage = () => {
       
     
       utterance.lang = "en-US";
-      utterance.rate = 1; // Speed
+      utterance.rate = 0.5; // Speed
       utterance.pitch = 1; // Pitch
       
     
@@ -142,7 +142,8 @@ const HomePage = () => {
         console.log("Speech Text:", speechText);
   
         const { intent, command } = predictIntent(speechText);
-        let responseText = `Detected intent: ${intent}, Command: ${command}`;
+        console.log(`Detected intent: ${intent}, Command: ${command}`)
+        let responseText = ""
   
         if (intent === "energy_consumption") {
           const { month, year } = extractMonth(speechText);
@@ -155,14 +156,16 @@ const HomePage = () => {
               const units = res.unitsConsumed || "No data available";
               console.log("Units Consumed:", units);
               speakText(`${units} units consumed`);
-              responseText += `, Units Consumed: ${units}`;
+              responseText += `Units Consumed: ${units}`;
             } else {
               console.log("Error:", res.error);
-              responseText += `, Error: ${res.error}`;
+              speakText("Please Try again")
+              responseText += `please try again `;
             }
           } catch (error) {
             console.error("Error fetching consumption data:", error);
-            responseText += `, Error: ${error.message}`;
+            responseText += 'please try again';
+            speakText("Please Try again")
           }
         }
   
@@ -269,18 +272,18 @@ const HomePage = () => {
             </Link>
 
 
-            <Link to="/reminders">
+            {/* <Link to="/reminders">
               <div className="col-span-1 flex flex-col justify-center items-center px-3 pt-2 border rounded-xl bg-white hover:bg-[#819b9b] gap-4 pb-4">
                 <img src={miniBitesIcon} alt="" className="w-8 h-8 " />
                 <div className="text-sm font-base">Add Reminders</div>
               </div>
-            </Link>
+            </Link> */}
 
           </div>
 
           <div className="flex justify-end items-end mt-8 mb-4" onClick={handleVoice}>
             <div className={`max-w-xs p-2`}>
-              {output ? output : "Try saying 'Hey home'"}
+              {output ? output : "Try saying 'what is last month energy consumption'"}
             </div>
             <img src={mic} alt="microphone" className="w-10 h-10" />
           </div>
