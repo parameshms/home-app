@@ -1,67 +1,60 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,CSSProperties } from "react";
 import "./App.css";
 import logo from "./assests/RuseLogo.svg";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import PuffLoader from "react-spinners/PuffLoader";
 
 const App = () => {
-  const AUTH_API = process.env.REACT_APP_API
+  const AUTH_API = process.env.REACT_APP_API;
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);  // New loading state
   const navigate = useNavigate();
 
- 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);  // Start loading
+
     try {
-      const response = await fetch(
-        `${AUTH_API}/login`,  // Fixed the missing backticks and quote in the URL
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-          }),
-        }
-      );
+      const response = await fetch(`${AUTH_API}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
       const data = await response.json();
 
       if (data?.error) {
         setError(data?.error);
       } else if (data?.flag === true) {
-        // If flag is true, navigate to /home
         navigate("/home");
-
-        // Store the necessary data in localStorage
         localStorage.setItem("token", data?.token);
         localStorage.setItem("username", data?.username);
         localStorage.setItem("role", data?.role);
         localStorage.setItem('flag', data?.flag);
-      } else if ((data?.role === "maid" || data?.role === "Cook")) {
-        // If flag is false and role is "maid" or "Cook", navigate to /AddGroceries
+      } else if (data?.role === "maid" || data?.role === "Cook") {
         navigate("/AddGroceries");
-
-        // Store the necessary data in localStorage
         localStorage.setItem("token", data?.token);
         localStorage.setItem("username", data?.username);
         localStorage.setItem("role", data?.role);
       } else if (data?.flag === false && data?.role === "Owner") {
-        // If flag is false and role is "Owner", navigate to /approval
         navigate("/approval");
         localStorage.setItem('flag', data?.flag);
       } else {
-        // Default fallback
         setError("Unexpected response");
       }
-      
+
     } catch (err) {
       setError("An error occurred. Please try again later.");
+    } finally {
+      setLoading(false);  // End loading
     }
-};
-
+  };
 
   return (
     <>
@@ -89,7 +82,7 @@ const App = () => {
                   type="text"
                   required
                   placeholder="Enter your username"
-                  onChange={(e)=>setEmail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="w-full border rounded-md py-2 text-gray-900 shadow-sm  placeholder:text-gray-400 outline-none p-2 text-[10px] font-base"
                 />
               </div>
@@ -131,9 +124,10 @@ const App = () => {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-[#3D6464]  px-3 py-1.5 text-sm font-medium tracking-wide leading-6 text-white shadow-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 hover:text-gray-400"
+                className="flex w-full justify-center rounded-md bg-[#3D6464] px-3 py-1.5 text-sm font-medium tracking-wide leading-6 text-white shadow-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 hover:text-gray-400"
+                disabled={loading}  // Disable button when loading
               >
-                Login
+                {loading ? <PuffLoader color="#508750" />: "Login"}  
               </button>
             </div>
           </form>
