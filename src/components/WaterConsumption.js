@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, CardContent, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Card, CardContent, Typography, Button, TextField } from "@mui/material";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { useTheme } from "@mui/material/styles";
-import TextField from '@mui/material/TextField';
 
 const WaterConsumption = () => {
   const [consumptionData, setConsumptionData] = useState([]);
   const [graphData, setGraphData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [showForm, setShowForm] = useState(false);
+
+  const API = process.env.REACT_APP_API;
+  const theme = useTheme();
+
+
+  const colorPalette = [(theme.vars || theme).palette.primary.light || "#3f51b5"];
+
   const [newWaterData, setNewWaterData] = useState({
     RR_No: "",
     consumerNo: "",
@@ -23,9 +31,6 @@ const WaterConsumption = () => {
     totalAmount: "",
   });
 
-  const theme = useTheme();
-  const API = process.env.REACT_APP_API;
-
   useEffect(() => {
     const fetchConsumptionData = async () => {
       const token = localStorage.getItem("token");
@@ -33,11 +38,13 @@ const WaterConsumption = () => {
         const response = await axios.get(`${API}/water_consumption/last_three_months`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setConsumptionData(response.data || []);
-        formatGraphData(response.data || []);
-        console.log(response)
+        const data = response.data || [];
+        setConsumptionData(data);
+        formatGraphData(data);
       } catch (error) {
-        console.error("Error fetching water data:", error);
+        setError("Error fetching water consumption data.");
+      } finally {
+        setLoading(false);
       }
     };
     fetchConsumptionData();
@@ -53,7 +60,7 @@ const WaterConsumption = () => {
       setShowForm(false);
       resetForm();
     } catch (error) {
-      console.error("Error adding water data:", error);
+      setError("Error adding water consumption data.");
     }
   };
 
@@ -63,32 +70,23 @@ const WaterConsumption = () => {
   };
 
   const formatGraphData = (data) => {
-    if (data && data.length > 0) {
-      const dates = data.map((entry) => entry.reading_date ? new Date(entry.reading_date).toLocaleDateString() : "N/A");
-      const consumptions = data.map((entry) => entry.consumption_liters || 0);
-      setGraphData({
-        labels: dates,
-        datasets: [
-          {
-            label: "Consumption (Liters)",
-            data: consumptions,
-            backgroundColor: theme.palette.primary.main,
-          },
-        ],
-      });
-    } else {
-      setGraphData({
-        labels: [],
-        datasets: [
-          {
-            label: "Consumption (Liters)",
-            data: [],
-          },
-        ],
-      });
-    }
+    const labels = data.map((entry) =>
+      entry.readingDate ? new Date(entry.readingDate).toLocaleDateString() : "N/A"
+    );
+    const consumptions = data.map((entry) => entry.consumptionInLtrs || 0);
+
+    setGraphData({
+      labels: labels,
+      datasets: [
+        {
+          label: "Consumption (Liters)",
+          data: consumptions,
+          backgroundColor: colorPalette,
+        },
+      ],
+    });
   };
-  
+
   const resetForm = () => {
     setNewWaterData({
       RR_No: "",
@@ -103,6 +101,35 @@ const WaterConsumption = () => {
       otherCharges: "",
       totalAmount: "",
     });
+  };
+
+  const renderConsumption = () => {
+    if (loading) return <Typography align="center">Loading...</Typography>;
+    if (error) return <Typography align="center" color="error">{error}</Typography>;
+    if (!consumptionData.length) return <Typography align="center">No data available.</Typography>;
+
+    return (
+      <Card sx={{ marginTop: "16px" }}>
+        <CardContent>
+          <Typography variant="h6">Water Consumption Data</Typography>
+          {graphData && (
+            <BarChart
+              data={graphData}
+              options={{
+                responsive: true,
+                plugins: {
+                  legend: {
+                    display: true,
+                  },
+                },
+              }}
+              width={600}
+              height={300}
+            />
+          )}
+        </CardContent>
+      </Card>
+    );
   };
 
   return (
@@ -134,66 +161,7 @@ const WaterConsumption = () => {
         </Card>
       )}
 
-      {consumptionData && consumptionData.length > 0 ? (
-        <>
-          <Card sx={{ marginTop: "16px" }}>
-            <CardContent>
-              <Typography variant="h6">Water Consumption Data</Typography>
-              <TableContainer>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>RR Number</TableCell>
-                      <TableCell>Consumer Number</TableCell>
-                      <TableCell>Bill Number</TableCell>
-                      <TableCell>Reading Date</TableCell>
-                      <TableCell>Consumption (Liters)</TableCell>
-                      <TableCell>Water Charges</TableCell>
-                      <TableCell>Total Amount</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {consumptionData.map((data, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{data?.RR_number || "N/A"}</TableCell>
-                        <TableCell>{data?.consumer_number || "N/A"}</TableCell>
-                        <TableCell>{data?.bill_number || "N/A"}</TableCell>
-                        <TableCell>{data?.reading_date ? new Date(data.reading_date).toLocaleDateString() : "N/A"}</TableCell>
-                        <TableCell>{data?.consumption_liters || 0}</TableCell>
-                        <TableCell>{data?.water_charges || 0}</TableCell>
-                        <TableCell>{data?.total_amount || 0}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </CardContent>
-          </Card>
-
-          {graphData && graphData.labels.length > 0 && graphData.datasets[0].data.length > 0 && (
-            <Card sx={{ marginTop: "16px" }}>
-              <CardContent>
-                <Typography variant="h6">Water Consumption Chart</Typography>
-                <BarChart
-                  data={graphData}
-                  options={{
-                    responsive: true,
-                    plugins: {
-                      legend: {
-                        display: true,
-                      },
-                    },
-                  }}
-                  width={600}
-                  height={300}
-                />
-              </CardContent>
-            </Card>
-          )}
-        </>
-      ) : (
-        <Typography variant="body1">No data available.</Typography>
-      )}
+      {renderConsumption()}
     </div>
   );
 };

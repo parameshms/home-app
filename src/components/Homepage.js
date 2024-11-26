@@ -1,14 +1,11 @@
 import roomImg from "../assests/roomImg.png";
-import rightArrowImg from "../assests/rightArrow.svg";
-import houseKeepingIcon from "../assests/houseKeepingIcon.svg";
+
 import miniBitesIcon from "../assests/miniBitesIcon.svg";
-import requestBoxIcon from "../assests/requestBoxIcon.svg";
 import foodIcon from "../assests/foodIcon.svg";
 import deviceControlIcon from "../assests/deviceControlIcon.svg";
 import mic from "../assests/mic.png";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import ModalHomePage from "./ModalHomePage";
 import axios from "axios";
 import moment from "moment";
 
@@ -190,6 +187,7 @@ const HomePage = () => {
     localStorage.removeItem('flag')
     localStorage.removeItem('role')
     navigate('/',{ replace: true });
+    window.location.reload();
   };
 
   const splitOutput = output.trim().split('\n');
@@ -272,15 +270,14 @@ const HomePage = () => {
             </Link>
 
 
-            {/* <Link to="/reminders">
+            <Link to="/reminders">
               <div className="col-span-1 flex flex-col justify-center items-center px-3 pt-2 border rounded-xl bg-white hover:bg-[#819b9b] gap-4 pb-4">
                 <img src={miniBitesIcon} alt="" className="w-8 h-8 " />
-                <div className="text-sm font-base">Add Reminders</div>
+                <div className="text-sm font-base">Reminders</div>
               </div>
-            </Link> */}
+            </Link>
 
           </div>
-
           <div className="flex justify-end items-end mt-8 mb-4" onClick={handleVoice}>
             <div className={`max-w-xs p-2`}>
               {output ? output : "Try saying 'what is last month energy consumption'"}
@@ -305,10 +302,10 @@ const HomePage = () => {
             <div>Powered by Rusé</div>
           </div>
         </div>
-        <ModalHomePage
+        {/* <ModalHomePage
           isOpen={showModal}
           closeModal={closeModal}
-        />
+        /> */}
       </div>
     </div>
   );

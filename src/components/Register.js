@@ -1,9 +1,8 @@
-
-
 import React, { useState } from "react";
 import "../App.css";
 import logo from "../assests/RuseLogo.svg";
 import { useNavigate } from "react-router-dom";
+import PuffLoader from "react-spinners/PuffLoader";
 
 export default function Register() {
   const [firstname, setFirstname] = useState("");
@@ -14,12 +13,14 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading,setLoading] = useState(false)
   const navigate = useNavigate();
 
   const AUTH_API = process.env.REACT_APP_API
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
 
     // Validate password and confirm password
     if (password !== confirmPassword) {
@@ -53,6 +54,9 @@ export default function Register() {
       }
     } catch (err) {
       setError("An error occurred. Please try again later.");
+    }
+    finally{
+      setLoading(false)
     }
   };
 
@@ -195,8 +199,9 @@ export default function Register() {
               <button
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-[#3D6464] px-3 py-1.5 text-sm font-medium tracking-wide leading-6 text-white shadow-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 hover:text-gray-400"
+                disabled = {loading}
               >
-                Register
+                {loading? <PuffLoader color="#508750"/> : "Register"}
               </button>
             </div>
           </form>

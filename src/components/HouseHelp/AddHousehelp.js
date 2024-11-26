@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import leftArrowIcon from "../../assests/leftArrow.svg"
+import leftArrowIcon from "../../assests/leftArrow.svg";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
@@ -84,20 +84,19 @@ export default function AddHousehelp() {
     };
 
     return (
-        <div className="container mx-auto mt-4 p-4 font-poppins">
+        <div className="container mx-auto mt-4 p-4 font-poppins max-w-lg">
             <div className="flex items-center gap-2 mb-4">
                 <img src={leftArrowIcon} alt="Back" onClick={handleBackButtonClick} className="cursor-pointer" />
                 <h2 className="text-[18px] font-semibold">Add Househelp</h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Personal Information */}
                 <input
                     type="text"
                     name="name"
                     value={newHouseHelp.name}
                     onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
+                    className="border p-2 rounded w-full block"
                     placeholder="Name"
                     required
                 />
@@ -106,7 +105,7 @@ export default function AddHousehelp() {
                     name="phone_number"
                     value={newHouseHelp.phone_number}
                     onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
+                    className="border p-2 rounded w-full block"
                     placeholder="Phone Number"
                     required
                 />
@@ -115,7 +114,7 @@ export default function AddHousehelp() {
                     name="adhar"
                     value={newHouseHelp.adhar}
                     onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
+                    className="border p-2 rounded w-full block"
                     placeholder="Aadhar"
                     required
                 />
@@ -124,12 +123,12 @@ export default function AddHousehelp() {
                     name="address"
                     value={newHouseHelp.address}
                     onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
+                    className="border p-2 rounded w-full block"
                     placeholder="Address"
                     required
                 />
 
-                {/* Dates */}
+                {/* Additional Fields */}
                 <div>
                     <label>Start date</label>
                     <input
@@ -137,7 +136,7 @@ export default function AddHousehelp() {
                         name="start_date"
                         value={newHouseHelp.start_date}
                         onChange={handleInputChange}
-                        className="border p-2 rounded w-full"
+                        className="border p-2 rounded w-full block"
                         required
                     />
                 </div>
@@ -148,16 +147,16 @@ export default function AddHousehelp() {
                         name="end_date"
                         value={newHouseHelp.end_date}
                         onChange={handleInputChange}
-                        className="border p-2 rounded w-full"
+                        className="border p-2 rounded w-full block"
                     />
                 </div>
 
-                {/* Select Fields */}
+                {/* Drop-down Fields */}
                 <select
                     name="gender"
                     value={newHouseHelp.gender}
                     onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
+                    className="border p-2 rounded w-full block"
                     required
                 >
                     <option value="">Select Gender</option>
@@ -169,7 +168,7 @@ export default function AddHousehelp() {
                     name="role"
                     value={newHouseHelp.role}
                     onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
+                    className="border p-2 rounded w-full block"
                     required
                 >
                     <option value="">Select Role</option>
@@ -183,7 +182,7 @@ export default function AddHousehelp() {
                     name="payment_type"
                     value={newHouseHelp.payment_type}
                     onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
+                    className="border p-2 rounded w-full block"
                     required
                 >
                     <option value="">Payment Type</option>
@@ -192,62 +191,6 @@ export default function AddHousehelp() {
                     <option value="Monthly">Monthly</option>
                     <option value="Yearly">Yearly</option>
                 </select>
-                <input
-                    type="text"
-                    name="total_value"
-                    value={newHouseHelp.total_value}
-                    onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
-                    placeholder="Total Value"
-                    required
-                />
-                <input
-                    type="text"
-                    name="payment_date"
-                    value={newHouseHelp.payment_date}
-                    onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
-                    placeholder="Payment Date"
-                    required
-                />
-                <select
-                    name="payment_mode"
-                    value={newHouseHelp.payment_mode}
-                    onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
-                    required
-                >
-                    <option value="">Payment Mode</option>
-                    <option value="Cash">Cash</option>
-                    <option value="UPI">UPI</option>
-                    <option value="Bank Transfer">Bank Transfer</option>
-                </select>
-
-                {/* Additional Payment Details */}
-                <input
-                    type="text"
-                    name="UPI_ID"
-                    value={newHouseHelp.UPI_ID}
-                    onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
-                    placeholder="UPI ID"
-                />
-                <input
-                    type="text"
-                    name="acc"
-                    value={newHouseHelp.acc}
-                    onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
-                    placeholder="Account Number"
-                />
-                <input
-                    type="text"
-                    name="ifsc"
-                    value={newHouseHelp.ifsc}
-                    onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
-                    placeholder="IFSC Code"
-                />
 
                 {/* Action Buttons */}
                 <div className="flex gap-2 col-span-2">

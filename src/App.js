@@ -9,7 +9,7 @@ const App = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);  // New loading state
+  const [loading, setLoading] = useState(false); 
   const navigate = useNavigate();
 
   const handleOnSubmit = async (e) => {
@@ -52,7 +52,7 @@ const App = () => {
     } catch (err) {
       setError("An error occurred. Please try again later.");
     } finally {
-      setLoading(false);  // End loading
+      setLoading(false);  
     }
   };
 
@@ -125,7 +125,7 @@ const App = () => {
               <button
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-[#3D6464] px-3 py-1.5 text-sm font-medium tracking-wide leading-6 text-white shadow-2xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 hover:text-gray-400"
-                disabled={loading}  // Disable button when loading
+                disabled={loading}  
               >
                 {loading ? <PuffLoader color="#508750" />: "Login"}  
               </button>

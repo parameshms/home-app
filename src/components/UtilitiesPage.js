@@ -23,17 +23,7 @@ const OrderFoodPage = () => {
           <h2 className="font-semibold text-[18px]">Utilities</h2>
         </div>
         <div className="p-2 m-2 mt-3">
-          {/* <div className="flex flex-col p-3 border-2 rounded-xl bg-white hover:bg-[#819b9b] gap-2 mb-4">
-            <div className="flex gap-4 items-center">
-              <div className="text-sm font-semibold">Utilities</div>
-              <div className="text-[10px] text-[#00A91B] font-semibold">
-                Open Now
-              </div>
-            </div>
-            <div className="text-[13px] font-medium">
-              Timings: 06:00 AM - 01:00 AM
-            </div>
-          </div> */}
+         
           <div className="flex flex-col gap-5">
             <Link to="/electricity">
               <div className="flex justify-between items-center px-9 py-7 pr-12 border-2 shadow-md rounded-xl bg-white hover:bg-[#819b9b]">
