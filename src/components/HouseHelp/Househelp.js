@@ -100,7 +100,33 @@ const HousehelpDetailsPage = () => {
       [name]: value,
     }));
   };
-  
+  const handleMarkAsPaid = async (userId) => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.put(
+        `${API}/househelp/update_payment_status/${userId}`,
+        {
+          payment_status: "Paid",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setHousehelpData((prevState) =>
+        prevState.househelps.map((househelp) =>
+          househelp._id === userId
+            ? { ...househelp, financial_info: { ...househelp.financial_info, payment_status: "Paid" } }
+            : househelp
+        )
+      );
+    } catch (error) {
+      console.error("Error marking payment as paid:", error);
+      setError("Failed to mark payment as paid. Please try again.");
+    }
+  };
+
 
   if (loading) {
     return <div>Loading...</div>;
@@ -208,6 +234,16 @@ const HousehelpDetailsPage = () => {
               <p className="text-gray-600">
                 Payment Date: {househelp.financial_info.payment_date}th of every month`
               </p>
+              {househelp.financial_info.payment_status !== "Paid" && (
+              <div className="mt-4">
+                <button
+                  onClick={() => handleMarkAsPaid(househelp._id)}
+                  className="text-white bg-green-500 rounded-lg px-4 py-2"
+                >
+                  Mark as Paid
+                </button>
+              </div>
+            )}
             </div>
             
           </div>
@@ -252,40 +288,37 @@ const HousehelpDetailsPage = () => {
       </div>
 
       {showForm && (
-  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 max-w-lg mx-auto">
     <div>
-   
       <input
         type="text"
         name="name"
         value={newHouseHelp.name}
         onChange={handleInputChange}
-        className="border p-2 rounded w-full"
+        className="border p-2 rounded w-full block"
         placeholder="Name"
         required
       />
     </div>
     <div>
-  
       <input
         type="text"
         name="phone_number"
         value={newHouseHelp.phone_number}
         onChange={handleInputChange}
-        className="border p-2 rounded w-full"
+        className="border p-2 rounded w-full block"
         placeholder="Phone Number"
         required
       />
     </div>
     <div>
-   
       <input
         type="text"
         name="adhar"
         value={newHouseHelp.adhar}
         onChange={handleInputChange}
-        className="border p-2 rounded w-full"
-        placeholder="Adhar"
+        className="border p-2 rounded w-full block"
+        placeholder="Aadhar"
         required
       />
     </div>
@@ -295,13 +328,12 @@ const HousehelpDetailsPage = () => {
         name="address"
         value={newHouseHelp.address}
         onChange={handleInputChange}
-        className="border p-2 rounded w-full"
+        className="border p-2 rounded w-full block"
         placeholder="Address"
         required
       />
     </div>
-  
-    
+
     <div>
       <label>Start date</label>
       <input
@@ -309,28 +341,27 @@ const HousehelpDetailsPage = () => {
         name="start_date"
         value={newHouseHelp.start_date}
         onChange={handleInputChange}
-        className="border p-2 rounded w-full"
-        placeholder="Start Date"
+        className="border p-2 rounded w-full block"
         required
       />
     </div>
     <div>
-    <label>End date</label>
+      <label>End date</label>
       <input
         type="date"
         name="end_date"
         value={newHouseHelp.end_date}
         onChange={handleInputChange}
-        className="border p-2 rounded w-full"
-        placeholder="End Date"
+        className="border p-2 rounded w-full block"
       />
     </div>
+
     <div>
       <select
         name="gender"
         value={newHouseHelp.gender}
         onChange={handleInputChange}
-        className="border p-2 rounded w-full"
+        className="border p-2 rounded w-full block"
         required
       >
         <option value="">Select Gender</option>
@@ -339,12 +370,13 @@ const HousehelpDetailsPage = () => {
         <option value="Other">Other</option>
       </select>
     </div>
+
     <div>
       <select
         name="payment_type"
         value={newHouseHelp.payment_type}
         onChange={handleInputChange}
-        className="border p-2 rounded w-full"
+        className="border p-2 rounded w-full block"
         required
       >
         <option value="">Payment Type</option>
@@ -355,14 +387,13 @@ const HousehelpDetailsPage = () => {
       </select>
     </div>
 
-  
     <div>
       <input
         type="text"
         name="total_value"
         value={newHouseHelp.total_value}
         onChange={handleInputChange}
-        className="border p-2 rounded w-full"
+        className="border p-2 rounded w-full block"
         placeholder="Total Value"
         required
       />
@@ -374,7 +405,7 @@ const HousehelpDetailsPage = () => {
         name="payment_date"
         value={newHouseHelp.payment_date}
         onChange={handleInputChange}
-        className="border p-2 rounded w-full"
+        className="border p-2 rounded w-full block"
         placeholder="Payment Date"
         required
       />
@@ -385,65 +416,67 @@ const HousehelpDetailsPage = () => {
         name="payment_mode"
         value={newHouseHelp.payment_mode}
         onChange={handleInputChange}
-        className="border p-2 rounded w-full"
+        className="border p-2 rounded w-full block"
         required
       >
         <option value="">Payment Mode</option>
-        <option value="Daily">Cash</option>
-        <option value="Weekly">UPI</option>
-        <option value="Monthly">Bank Transfer</option>
+        <option value="Cash">Cash</option>
+        <option value="UPI">UPI</option>
+        <option value="Bank Transfer">Bank Transfer</option>
       </select>
     </div>
 
+    <div>
+      <input
+        type="text"
+        name="UPI_ID"
+        value={newHouseHelp.UPI_ID}
+        onChange={handleInputChange}
+        className="border p-2 rounded w-full block"
+        placeholder="UPI ID"
+      />
+    </div>
 
     <div>
-            <input
-              type="text"
-              name="UPI_ID"
-              value={newHouseHelp.UPI_ID}   
-              onChange={handleInputChange}
-              className="border p-2 rounded w-full"
-              placeholder="UPI ID"
-            />
-          </div>
-          <div>
-            <input
-              type="text"
-              name="acc"
-              value={newHouseHelp.acc}
-              onChange={handleInputChange}
-              className="border p-2 rounded w-full"
-              placeholder="Account Number"
-            />
-          </div>
-          <div>
-            <input
-              type="text"
-              name="ifsc"
-              value={newHouseHelp.ifsc}
-              onChange={handleInputChange}
-              className="border p-2 rounded w-full"
-              placeholder="IFSC Code "
-            />
-          </div>
+      <input
+        type="text"
+        name="acc"
+        value={newHouseHelp.acc}
+        onChange={handleInputChange}
+        className="border p-2 rounded w-full block"
+        placeholder="Account Number"
+      />
+    </div>
 
-          <div className="flex gap-2 col-span-2">
-            <button
-              onClick={handleCreateHousehelp}
-              className="text-white p-2 rounded w-full"
-              style={{ background: '#3d6464' }}
-            >
-              Submit
-            </button>
-            <button
-              onClick={() => setShowForm(false)}
-              className="bg-red-400 text-white p-2 rounded w-full"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
+    <div>
+      <input
+        type="text"
+        name="ifsc"
+        value={newHouseHelp.ifsc}
+        onChange={handleInputChange}
+        className="border p-2 rounded w-full block"
+        placeholder="IFSC Code"
+      />
+    </div>
+
+    <div className="flex gap-2 col-span-2">
+      <button
+        onClick={handleCreateHousehelp}
+        className="text-white p-2 rounded w-full block"
+        style={{ background: '#3d6464' }}
+      >
+        Submit
+      </button>
+      <button
+        onClick={() => setShowForm(false)}
+        className="bg-red-400 text-white p-2 rounded w-full block"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+)}
+
    </div>
   );
 };

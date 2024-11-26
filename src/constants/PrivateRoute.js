@@ -12,7 +12,7 @@ const PrivateRoute = ({ element: Component, ...rest }) => {
     return <Navigate to="/" />;
   }
 
-  if (role === 'Owner') {
+  if (role === 'Owner' || role === 'member') {
     return <Navigate to="/home" />;
   } else if (role === 'Maid' || role === 'Cook') {
     return <Navigate to="/AddGroceries" />;

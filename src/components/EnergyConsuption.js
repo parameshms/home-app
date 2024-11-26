@@ -264,152 +264,143 @@ const EnergyConsumption = () => {
           </button>
         </div>
       </div>
-      <div style={{padding:"20px"}}>
-      {showForm && (
-              <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <input
-                    type="text"
-                    name="RR_No"
-                    value={newEnergyData.userId}
-                    onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
-                    placeholder="RR No"
-                    required
-                  />
-                </div>
-                <div>
-                  <input
-                    type="text"
-                    name="accId"
-                    value={newEnergyData.accId}
-                    onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
-                    placeholder="Account ID"
-                    required
-                  />
-                </div>
-                <div>
-                  <input
-                    type="text"
-                    name="address"
-                    value={newEnergyData.address}
-                    onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
-                    placeholder="Address"
-                    required
-                  />
-                </div>
-                <div>
-                  <input
-                    type="text"
-                    name="billPeriod"
-                    value={newEnergyData.billPeriod}
-                    onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
-                    placeholder="Bill Period"
-                    required
-                  />
-                </div>
-                <div>
-                  <label>Reading Date</label>
-                  <input
-                    type="date"
-                    name="readingDate"
-                    value={newEnergyData.readingDate}
-                    onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
-                    placeholder="Reading Date"
-                    required
-                  />
-                </div>
+      <div className="px-4 py-6 sm:px-8 lg:px-12">
+  {showForm && (
+    <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="w-full">
+        <input
+          type="text"
+          name="RR_No"
+          value={newEnergyData.RR_No}
+          onChange={handleInputChange}
+          className="border p-2 rounded w-full"
+          placeholder="RR No"
+          required
+        />
+      </div>
+      <div className="w-full">
+        <input
+          type="text"
+          name="accId"
+          value={newEnergyData.accId}
+          onChange={handleInputChange}
+          className="border p-2 rounded w-full"
+          placeholder="Account ID"
+          required
+        />
+      </div>
+      <div className="w-full">
+        <input
+          type="text"
+          name="address"
+          value={newEnergyData.address}
+          onChange={handleInputChange}
+          className="border p-2 rounded w-full"
+          placeholder="Address"
+          required
+        />
+      </div>
+      <div className="w-full">
+        <input
+          type="text"
+          name="billPeriod"
+          value={newEnergyData.billPeriod}
+          onChange={handleInputChange}
+          className="border p-2 rounded w-full"
+          placeholder="Bill Period"
+          required
+        />
+      </div>
+      <div className="w-full sm:col-span-1">
+        <label className="block text-sm font-medium text-gray-700">Reading Date</label>
+        <input
+          type="date"
+          name="readingDate"
+          value={newEnergyData.readingDate}
+          onChange={handleInputChange}
+          className="border p-2 rounded w-full"
+          required
+        />
+      </div>
+      <div className="w-full sm:col-span-1">
+        <label className="block text-sm font-medium text-gray-700">Due Date</label>
+        <input
+          type="date"
+          name="BillDueDate"
+          value={newEnergyData.BillDueDate}
+          onChange={handleInputChange}
+          className="border p-2 rounded w-full"
+          required
+        />
+      </div>
+      <div className="w-full">
+        <input
+          type="text"
+          name="billNumber"
+          value={newEnergyData.billNumber}
+          onChange={handleInputChange}
+          className="border p-2 rounded w-full"
+          placeholder="Bill Number"
+          required
+        />
+      </div>
+      <div className="w-full">
+        <input
+          type="number"
+          name="consumptionDetails.presentReading"
+          value={newEnergyData.consumptionDetails.presentReading}
+          onChange={handleInputChange}
+          className="border p-2 rounded w-full"
+          placeholder="Present Reading"
+          required
+        />
+      </div>
+      <div className="w-full">
+        <input
+          type="number"
+          name="consumptionDetails.previousReading"
+          value={newEnergyData.consumptionDetails.previousReading}
+          onChange={handleInputChange}
+          className="border p-2 rounded w-full"
+          placeholder="Previous Reading"
+          required
+        />
+      </div>
+      <div className="w-full">
+        <input
+          type="number"
+          name="consumptionDetails.unitsConsumed"
+          value={newEnergyData.consumptionDetails.unitsConsumed}
+          onChange={handleInputChange}
+          className="border p-2 rounded w-full"
+          placeholder="Units Consumed"
+          required
+        />
+      </div>
+      <div className="w-full">
+        <input
+          type="number"
+          name="consumptionDetails.NetPayable"
+          value={newEnergyData.consumptionDetails.NetPayable}
+          onChange={handleInputChange}
+          className="border p-2 rounded w-full"
+          placeholder="Net Payable"
+          required
+        />
+      </div>
+      <div className="col-span-2">
+        <button
+          type="button"
+          onClick={handleAddData}
+          className="bg-blue-500 text-white p-3 rounded w-full sm:w-auto"
+        >
+          Add Energy Data
+        </button>
+      </div>
+    </div>
+  )}
+</div>
 
-                <div>
-                  <label>Due Date</label>
-                  <input
-                    type="date"
-                    name="BillDueDate"
-                    value={newEnergyData.BillDueDate}
-                    onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
-                    placeholder="Bill Due Date"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <input
-                    type="text"
-                    name="billNumber"
-                    value={newEnergyData.billNumber}
-                    onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
-                    placeholder="Bill Number"
-                    required
-                  />
-                </div>
-                <div>
-                  <input
-                    type="number"
-                    name="consumptionDetails.presentReading"
-                    value={newEnergyData.consumptionDetails.presentReading}
-                    onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
-                    placeholder="Present Reading"
-                    required
-                  />
-                </div>
-                <div>
-                  <input
-                    type="number"
-                    name="consumptionDetails.previousReading"
-                    value={newEnergyData.consumptionDetails.previousReading}
-                    onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
-                    placeholder="Previous Reading"
-                    required
-                  />
-                </div>
-                <div>
-                  <input
-                    type="number"
-                    name="consumptionDetails.unitsConsumed"
-                    value={newEnergyData.consumptionDetails.unitsConsumed}
-                    onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
-                    placeholder="Units Consumed"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <input
-                    type="number"
-                    name="consumptionDetails.NetPayable"
-                    value={newEnergyData.consumptionDetails.NetPayable}
-                    onChange={handleInputChange}
-                    className="border p-2 rounded w-full"
-                    placeholder="Net Payable"
-                    required
-                  />
-                </div>
-
-                
-
-               
-                
-                <div className="col-span-2">
-                  <button
-                    type="button"
-                    onClick={handleAddData}
-                    className="bg-blue-500 text-white p-2 rounded w-full"
-                  >
-                    Add Energy Data
-                  </button>
-                </div>
-              </div>
-            )}
-            </div>
 
       
         
@@ -463,9 +454,6 @@ const EnergyConsumption = () => {
                 />
               </CardContent>
             </Card>
-        
-     
-    
     </>
       )}
     </div>
