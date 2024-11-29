@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import leftArrowIcon from "../../assests/leftArrow.svg";
+import { useNavigate } from "react-router-dom";
 
 const HousehelpDetailsPage = () => {
   const { role } = useParams();
@@ -13,6 +14,7 @@ const HousehelpDetailsPage = () => {
   const API = process.env.REACT_APP_API
   const token = localStorage.getItem("token");
   const bottomRef = useRef(null);
+  const navigate = useNavigate()
   const [newHouseHelp, setNewHouseHelp] = useState({
     name: "",
     phone_number: "",
@@ -265,7 +267,7 @@ const HousehelpDetailsPage = () => {
     }
 
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {househelpData.househelps.map((househelp, index) => (
           <div key={index} className="bg-white shadow-md rounded-lg p-6">
             <div className="flex items-center mb-4">
@@ -380,19 +382,20 @@ const HousehelpDetailsPage = () => {
                 ? "Mark as Paid"
                 : "Mark as Pending"}
             </button>
-          
-          </div>      
-                )}
+           
+          </div>   
              
-              </div>
-            )}
-
-          <button
+                )}
+              <button
           onClick={() => handleDelete(househelp._id)}
-           className="text-white bg-red-500 rounded-lg px-4 py-2 ml-56"
+           className="text-white bg-amber-600 px-4 py-2 rounded mt-2"
             >
             Delete {role}
             </button>
+              </div>
+            )}
+
+         
            
           </div>
         ))}
@@ -420,7 +423,7 @@ const HousehelpDetailsPage = () => {
           <button
             type="button"
             className="text-white bg-slate-400 focus:ring-1 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-            onClick={() => setShowForm(true)}
+            onClick={() => navigate("/addHouseHelps")}
           >
             Add {role}
             <svg
@@ -442,240 +445,246 @@ const HousehelpDetailsPage = () => {
         )}
       </div>
 
-      {showForm   && (
-         <div ref={bottomRef}>
-  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 max-w-lg mx-auto">
-    {/* <div>
-      <input
-        type="text"
-        name="name"
-        value={newHouseHelp.name}
-        onChange={handleInputChange}
-        className="border p-2 rounded w-full block"
-        placeholder="Name"
-        required
-      />
-    </div> */}
-    <div>
-            <input
-              type="text"
-              name="name"
-              value={newHouseHelp.name}
-              onChange={handleInputChange}
-              className={`border p-2 rounded w-full block ${
-                errors.name ? "border-red-500" : ""
-              }`}
-              placeholder="Name"
-            />
-            {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
-          </div>
+      {showForm && (
+  <div ref={bottomRef}>
+    <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 max-w-lg mx-auto">
+      {/* Name Field */}
+      <div>
+        <input
+          type="text"
+          name="name"
+          value={newHouseHelp.name}
+          onChange={handleInputChange}
+          className={`border p-2 rounded w-full block ${
+            errors.name ? "border-red-500" : ""
+          }`}
+          placeholder="Name"
+        />
+        {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+      </div>
 
+      {/* Phone Number Field */}
+      <div>
+        <input
+          type="text"
+          name="phone_number"
+          value={newHouseHelp.phone_number}
+          onChange={handleInputChange}
+          className={`border p-2 rounded w-full block ${
+            errors.phone_number ? "border-red-500" : ""
+          }`}
+          placeholder="Phone Number"
+        />
+        {errors.phone_number && (
+          <p className="text-red-500 text-sm">{errors.phone_number}</p>
+        )}
+      </div>
+
+      {/* Aadhar Field */}
+      <div>
+        <input
+          type="text"
+          name="adhar"
+          value={newHouseHelp.adhar}
+          onChange={handleInputChange}
+          className="border p-2 rounded w-full block"
+          placeholder="Aadhar"
+          required
+        />
+      </div>
+
+      {/* Address Field */}
+      <div>
+        <input
+          type="text"
+          name="address"
+          value={newHouseHelp.address}
+          onChange={handleInputChange}
+          className="border p-2 rounded w-full block"
+          placeholder="Address"
+          required
+        />
+      </div>
+
+      {/* Start Date Field */}
+      <div>
+        <label>Start date</label>
+        <input
+          type="date"
+          name="start_date"
+          value={newHouseHelp.start_date}
+          onChange={handleInputChange}
+          className="border p-2 rounded w-full block"
+          required
+        />
+      </div>
+
+      {/* End Date Field */}
+      <div>
+        <label>End date</label>
+        <input
+          type="date"
+          name="end_date"
+          value={newHouseHelp.end_date}
+          onChange={handleInputChange}
+          className={`border p-2 rounded w-full block ${
+            errors.end_date ? "border-red-500" : ""
+          }`}
+        />
+        {errors.end_date && (
+          <p className="text-red-500 text-sm">{errors.end_date}</p>
+        )}
+      </div>
+
+      {/* Gender Selection */}
+      <div>
+        <select
+          name="gender"
+          value={newHouseHelp.gender}
+          onChange={handleInputChange}
+          className="border p-2 rounded w-full block"
+          required
+        >
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      {/* Payment Type Selection */}
+      <div>
+        <select
+          name="payment_type"
+          value={newHouseHelp.payment_type}
+          onChange={handleInputChange}
+          className="border p-2 rounded w-full block"
+          required
+        >
+          <option value="">Payment Type</option>
+          <option value="Daily">Daily</option>
+          <option value="Weekly">Weekly</option>
+          <option value="Monthly">Monthly</option>
+          <option value="Yearly">Yearly</option>
+        </select>
+      </div>
+
+      {/* Total Value Field */}
+      <div>
+        <input
+          type="text"
+          name="total_value"
+          value={newHouseHelp.total_value}
+          onChange={handleInputChange}
+          className="border p-2 rounded w-full block"
+          placeholder="Total Value"
+          required
+        />
+      </div>
+
+      {/* Payment Mode Selection */}
+      <div>
+        <select
+          name="payment_mode"
+          value={newHouseHelp.payment_mode}
+          onChange={handleInputChange}
+          className={`border p-2 rounded w-full block ${
+            errors.payment_mode ? "border-red-500" : ""
+          }`}
+        >
+          <option value="">Payment Mode</option>
+          <option value="Cash">Cash</option>
+          <option value="UPI">UPI</option>
+          <option value="Bank Transfer">Bank Transfer</option>
+        </select>
+        {errors.payment_mode && (
+          <p className="text-red-500 text-sm">{errors.payment_mode}</p>
+        )}
+      </div>
+
+      {/* UPI ID Field */}
+      <div>
+        <input
+          type="text"
+          name="UPI_ID"
+          value={newHouseHelp.UPI_ID}
+          onChange={handleInputChange}
+          className={`border p-2 rounded w-full block ${
+            errors.UPI_ID ? "border-red-500" : ""
+          }`}
+          placeholder="UPI ID"
+        />
+        {errors.UPI_ID && (
+          <p className="text-red-500 text-sm">{errors.UPI_ID}</p>
+        )}
+      </div>
+
+      {/* Bank Transfer Fields (Conditional) */}
+      {newHouseHelp.payment_mode === "Bank Transfer" && (
+        <>
           <div>
             <input
               type="text"
-              name="phone_number"
-              value={newHouseHelp.phone_number}
+              name="acc"
+              value={newHouseHelp.acc}
               onChange={handleInputChange}
               className={`border p-2 rounded w-full block ${
-                errors.phone_number ? "border-red-500" : ""
+                errors.acc ? "border-red-500" : ""
               }`}
-              placeholder="Phone Number"
+              placeholder="Account Number"
             />
-            {errors.phone_number && (
-              <p className="text-red-500 text-sm">{errors.phone_number}</p>
-            )}
-          </div>
-    <div>
-      <input
-        type="text"
-        name="adhar"
-        value={newHouseHelp.adhar}
-        onChange={handleInputChange}
-        className="border p-2 rounded w-full block"
-        placeholder="Aadhar"
-        required
-      />
-    </div>
-    <div>
-      <input
-        type="text"
-        name="address"
-        value={newHouseHelp.address}
-        onChange={handleInputChange}
-        className="border p-2 rounded w-full block"
-        placeholder="Address"
-        required
-      />
-    </div>
-
-    <div>
-      <label>Start date</label>
-      <input
-        type="date"
-        name="start_date"
-        value={newHouseHelp.start_date}
-        onChange={handleInputChange}
-        className="border p-2 rounded w-full block"
-        required
-      />
-    </div>
-    <div>
-            <label>End date</label>
-            <input
-              type="date"
-              name="end_date"
-              value={newHouseHelp.end_date}
-              onChange={handleInputChange}
-              className={`border p-2 rounded w-full block ${
-                errors.end_date ? "border-red-500" : ""
-              }`}
-            />
-            {errors.end_date && (
-              <p className="text-red-500 text-sm">{errors.end_date}</p>
-            )}
-          </div>
-
-
-    <div>
-      <select
-        name="gender"
-        value={newHouseHelp.gender}
-        onChange={handleInputChange}
-        className="border p-2 rounded w-full block"
-        required
-      >
-        <option value="">Select Gender</option>
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-        <option value="Other">Other</option>
-      </select>
-    </div>
-
-    <div>
-      <select
-        name="payment_type"
-        value={newHouseHelp.payment_type}
-        onChange={handleInputChange}
-        className="border p-2 rounded w-full block"
-        required
-      >
-        <option value="">Payment Type</option>
-        <option value="Daily">Daily</option>
-        <option value="Weekly">Weekly</option>
-        <option value="Monthly">Monthly</option>
-        <option value="Yearly">Yearly</option>
-      </select>
-    </div>
-
-    <div>
-      <input
-        type="text"
-        name="total_value"
-        value={newHouseHelp.total_value}
-        onChange={handleInputChange}
-        className="border p-2 rounded w-full block"
-        placeholder="Total Value"
-        required
-      />
-    </div>
-
-   
-
-    <div>
-            <select
-              name="payment_mode"
-              value={newHouseHelp.payment_mode}
-              onChange={handleInputChange}
-              className={`border p-2 rounded w-full block ${
-                errors.payment_mode ? "border-red-500" : ""
-              }`}
-            >
-              <option value="">Payment Mode</option>
-              <option value="Cash">Cash</option>
-              <option value="UPI">UPI</option>
-              <option value="Bank Transfer">Bank Transfer</option>
-            </select>
-            {errors.payment_mode && (
-              <p className="text-red-500 text-sm">{errors.payment_mode}</p>
+            {errors.acc && (
+              <p className="text-red-500 text-sm">{errors.acc}</p>
             )}
           </div>
           <div>
-              <input
-                type="text"
-                name="UPI_ID"
-                value={newHouseHelp.UPI_ID}
-                onChange={handleInputChange}
-                className={`border p-2 rounded w-full block ${
-                  errors.UPI_ID ? "border-red-500" : ""
-                }`}
-                placeholder="UPI ID"
-              />
-              {errors.UPI_ID && (
-                <p className="text-red-500 text-sm">{errors.UPI_ID}</p>
-              )}
-            </div>
-
-            {newHouseHelp.payment_mode === "Bank Transfer" && (
-            <>
-              <div>
-                <input
-                  type="text"
-                  name="acc"
-                  value={newHouseHelp.acc}
-                  onChange={handleInputChange}
-                  className={`border p-2 rounded w-full block ${
-                    errors.acc ? "border-red-500" : ""
-                  }`}
-                  placeholder="Account Number"
-                />
-                {errors.acc && (
-                  <p className="text-red-500 text-sm">{errors.acc}</p>
-                )}
-              </div>
-              <div>
-                <input
-                  type="text"
-                  name="ifsc"
-                  value={newHouseHelp.ifsc}
-                  onChange={handleInputChange}
-                  className={`border p-2 rounded w-full block ${
-                    errors.ifsc ? "border-red-500" : ""
-                  }`}
-                  placeholder="IFSC Code"
-                />
-                {errors.ifsc && (
-                  <p className="text-red-500 text-sm">{errors.ifsc}</p>
-                )}
-              </div>
-            </>
-          )}
- <div>
-      <label>Payment Date</label>
-      <input
-        type="date"
-        name="payment_date"
-        value={newHouseHelp.payment_date}
-        onChange={handleInputChange}
-        className="border p-2 rounded w-full block"
-        required
-      />
-    </div>
-<div className="flex gap-2 col-span-2">
-            <button
-              onClick={handleCreateHousehelp}
-              className="text-white p-2 rounded w-full block"
-              style={{ background: "#3d6464" }}
-            >
-              Submit
-            </button>
-            <button
-              onClick={() => setShowForm(false)}
-              className="bg-red-400 text-white p-2 rounded w-full block"
-            >
-              Cancel
-            </button>
+            <input
+              type="text"
+              name="ifsc"
+              value={newHouseHelp.ifsc}
+              onChange={handleInputChange}
+              className={`border p-2 rounded w-full block ${
+                errors.ifsc ? "border-red-500" : ""
+              }`}
+              placeholder="IFSC Code"
+            />
+            {errors.ifsc && (
+              <p className="text-red-500 text-sm">{errors.ifsc}</p>
+            )}
           </div>
-  </div>
+        </>
+      )}
+
+      {/* Payment Date Field */}
+      <div>
+        <label>Payment Date</label>
+        <input
+          type="date"
+          name="payment_date"
+          value={newHouseHelp.payment_date}
+          onChange={handleInputChange}
+          className="border p-2 rounded w-full block"
+          required
+        />
+      </div>
+
+      {/* Submit and Cancel Buttons */}
+      <div className="flex gap-2 col-span-2">
+        <button
+          onClick={handleCreateHousehelp}
+          className="text-white p-2 rounded w-full block"
+          style={{ background: "#3d6464" }}
+        >
+          Submit
+        </button>
+        <button
+          onClick={() => setShowForm(false)}
+          className="bg-red-400 text-white p-2 rounded w-full block"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
   </div>
 )}
 
