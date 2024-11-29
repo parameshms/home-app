@@ -8,9 +8,9 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
-import family from '../assests/family.jpeg'
+import family from '../assests/family.png'
 import groceries from '../assests/groceries.png'
-import house from '../assests/homeCare.png'
+import house from '../assests/house.jpg'
 import util from '../assests/util.png'
 import reminder from '../assests/reminder.png'
 
