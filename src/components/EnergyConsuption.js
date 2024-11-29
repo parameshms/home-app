@@ -90,11 +90,11 @@ const EnergyConsumption = () => {
           },
         }
       );
+     
+      setConsumptionData((prevData) => [...prevData, response.data]);
       fetchConsumptionData()
-      setConsumptionData((prevData) => [...prevData, response.data]); // Add new data to the list
-      
-      setShowForm(false); // Hide the form after adding
-      setNewEnergyData({ // Reset the form
+      setShowForm(false); 
+      setNewEnergyData({ 
         readingDate: "",
         unitsConsumed: "",
         BillDueDate: "",
