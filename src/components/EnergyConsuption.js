@@ -51,32 +51,30 @@ const EnergyConsumption = () => {
     // (theme.vars || theme).palette.primary.main,
     (theme.vars || theme).palette.primary.light,
   ];
-
-  useEffect(() => {
-    const fetchConsumptionData = async () => {
-      const token = localStorage.getItem("token");
-      try {
-        const response = await fetch(`${API}/get_last_three_months`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await response.json();
-        if (data.error) {
-          setError(data.error || "Failed to load data");
-        } else {
-          setConsumptionData(data);
-          formatGraphData(data);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError("Failed to fetch energy consumption data.");
-      } finally {
-        setLoading(false);
+  const fetchConsumptionData = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await fetch(`${API}/get_last_three_months`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (data.error) {
+        setError(data.error || "Failed to load data");
+      } else {
+        setConsumptionData(data);
+        formatGraphData(data);
       }
-    };
-
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setError("Failed to fetch energy consumption data.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
     fetchConsumptionData();
   }, []);
 
@@ -92,30 +90,14 @@ const EnergyConsumption = () => {
           },
         }
       );
+      fetchConsumptionData()
       setConsumptionData((prevData) => [...prevData, response.data]); // Add new data to the list
+      
       setShowForm(false); // Hide the form after adding
       setNewEnergyData({ // Reset the form
-        RR_No: "",
-        accId: "",
-        address: "",
-        billPeriod: "",
         readingDate: "",
-        billNumber: "",
-        consumptionDetails: {
-          presentReading: "",
-          previousReading: "",
-          unitsConsumed: "",
-          billForConsumedUnits: {
-            fixedCharges: { unit: "", rate: "", amount: "" },
-            energyCharges: { unit: "", rate: "", amount: "" },
-            FPPCACharges: { unit: "", rate: "", amount: "" },
-            tax: { rate: "", Amount: "" },
-          },
-        },
-        additionalCharges: { pfPenalty: "", interest: "" },
-        NetPayable: "",
+        unitsConsumed: "",
         BillDueDate: "",
-        
       });
     } catch (error) {
       console.error("Error creating energy consumption data:", error);
@@ -197,22 +179,27 @@ const EnergyConsumption = () => {
 
     return (
       <table className="table-auto w-full text-left">
+        
         <thead className="bg-gray-200">
           <tr>
-            <th className="px-4 py-2">Acc ID</th>
             <th className="px-4 py-2">Reading Date</th>
             <th className="px-4 py-2">Units Consumed</th>
+            <th className="px-4 py-2">Due Date</th>
           </tr>
         </thead>
         <tbody>
           {consumptionData.map((bill, index) => (
             <tr key={index} className="border-t">
-              <td className="px-4 py-2">{bill.accId}</td>
+             
               <td className="px-4 py-2">
                 {new Date(bill.readingDate).toLocaleDateString()}
               </td>
               <td className="px-4 py-2">
                 {bill.consumptionDetails.unitsConsumed}
+              </td>
+              
+              <td className="px-4 py-2">
+                {new Date(bill.BillDueDate).toLocaleDateString()}
               </td>
             </tr>
           ))}
@@ -226,12 +213,12 @@ const EnergyConsumption = () => {
     <div className="flex min-h-full flex-1 flex-col justify-center font-poppins">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm mt-6 p-2">
         <div className="min-h-full font-poppins tracking-wide flex gap-6 p-2 items-center">
-          <img
-            src={leftArrowIcon}
-            alt="Back"
-            className="cursor-pointer"
-            onClick={handleBackButtonClick}
-          />
+        <img
+        src={leftArrowIcon}
+        alt="Back"
+        onClick={handleBackButtonClick}
+        className="w-10 h-10 cursor-pointer mb-6 "
+      />
           <h2 className="font-semibold text-[18px]">
             Your Energy Consumption Details over last 3 months
           </h2>
@@ -267,50 +254,8 @@ const EnergyConsumption = () => {
       <div className="px-4 py-6 sm:px-8 lg:px-12">
   {showForm && (
     <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <div className="w-full">
-        <input
-          type="text"
-          name="RR_No"
-          value={newEnergyData.RR_No}
-          onChange={handleInputChange}
-          className="border p-2 rounded w-full"
-          placeholder="RR No"
-          required
-        />
-      </div>
-      <div className="w-full">
-        <input
-          type="text"
-          name="accId"
-          value={newEnergyData.accId}
-          onChange={handleInputChange}
-          className="border p-2 rounded w-full"
-          placeholder="Account ID"
-          required
-        />
-      </div>
-      <div className="w-full">
-        <input
-          type="text"
-          name="address"
-          value={newEnergyData.address}
-          onChange={handleInputChange}
-          className="border p-2 rounded w-full"
-          placeholder="Address"
-          required
-        />
-      </div>
-      <div className="w-full">
-        <input
-          type="text"
-          name="billPeriod"
-          value={newEnergyData.billPeriod}
-          onChange={handleInputChange}
-          className="border p-2 rounded w-full"
-          placeholder="Bill Period"
-          required
-        />
-      </div>
+     
+    
       <div className="w-full sm:col-span-1">
         <label className="block text-sm font-medium text-gray-700">Reading Date</label>
         <input
@@ -333,39 +278,8 @@ const EnergyConsumption = () => {
           required
         />
       </div>
-      <div className="w-full">
-        <input
-          type="text"
-          name="billNumber"
-          value={newEnergyData.billNumber}
-          onChange={handleInputChange}
-          className="border p-2 rounded w-full"
-          placeholder="Bill Number"
-          required
-        />
-      </div>
-      <div className="w-full">
-        <input
-          type="number"
-          name="consumptionDetails.presentReading"
-          value={newEnergyData.consumptionDetails.presentReading}
-          onChange={handleInputChange}
-          className="border p-2 rounded w-full"
-          placeholder="Present Reading"
-          required
-        />
-      </div>
-      <div className="w-full">
-        <input
-          type="number"
-          name="consumptionDetails.previousReading"
-          value={newEnergyData.consumptionDetails.previousReading}
-          onChange={handleInputChange}
-          className="border p-2 rounded w-full"
-          placeholder="Previous Reading"
-          required
-        />
-      </div>
+     
+     
       <div className="w-full">
         <input
           type="number"
@@ -377,17 +291,7 @@ const EnergyConsumption = () => {
           required
         />
       </div>
-      <div className="w-full">
-        <input
-          type="number"
-          name="consumptionDetails.NetPayable"
-          value={newEnergyData.consumptionDetails.NetPayable}
-          onChange={handleInputChange}
-          className="border p-2 rounded w-full"
-          placeholder="Net Payable"
-          required
-        />
-      </div>
+    
       <div className="col-span-2">
         <button
           type="button"

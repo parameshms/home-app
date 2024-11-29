@@ -3,6 +3,7 @@ import "./App.css";
 import logo from "./assests/RuseLogo.svg";
 import { useNavigate } from "react-router-dom";
 import PuffLoader from "react-spinners/PuffLoader";
+import API from './api';
 
 const App = () => {
   const AUTH_API = process.env.REACT_APP_API;
@@ -16,18 +17,25 @@ const App = () => {
     e.preventDefault();
     setLoading(true);  // Start loading
 
+    // try {
+    //   const response = await fetch(`${AUTH_API}/login`, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       email: email,
+    //       password: password,
+    //     }),
+    //   });
+    //   const data = await response.json();
     try {
-      const response = await fetch(`${AUTH_API}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
+      const response = await API.post('/login', {
+        email,
+        password,
       });
-      const data = await response.json();
+  
+      const data = response.data;
 
       if (data?.error) {
         setError(data?.error);
@@ -37,11 +45,15 @@ const App = () => {
         localStorage.setItem("username", data?.username);
         localStorage.setItem("role", data?.role);
         localStorage.setItem('flag', data?.flag);
+        localStorage.setItem('refreshToken', data?.refresh_token);
+     
+
       } else if (data?.role === "maid" || data?.role === "Cook") {
         navigate("/AddGroceries");
         localStorage.setItem("token", data?.token);
         localStorage.setItem("username", data?.username);
         localStorage.setItem("role", data?.role);
+        localStorage.setItem('refreshToken', data?.refresh_token);
       } else if (data?.flag === false && data?.role === "Owner") {
         navigate("/approval");
         localStorage.setItem('flag', data?.flag);

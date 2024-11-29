@@ -15,12 +15,13 @@ const OrderFoodPage = () => {
     <div className="flex min-h-full flex-1 flex-col justify-center font-poppins scroll-auto">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm mt-6 p-2">
         <div className="min-h-full font-poppins tracking-wide flex gap-6 p-2">
-          <img
-            src={leftArrowIcon}
-            alt=""
-            onClick={() => handleBackButtonClick()}
-          />
-          <h2 className="font-semibold text-[18px]">Utilities</h2>
+        <img
+        src={leftArrowIcon}
+        alt="Back"
+        onClick={handleBackButtonClick}
+        className="w-10 h-10 cursor-pointer mb-6 "
+      />
+          <h3 className="text-2xl font-bold mb-4">Utilities</h3>
         </div>
         <div className="p-2 m-2 mt-3">
          

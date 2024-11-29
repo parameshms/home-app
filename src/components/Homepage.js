@@ -8,6 +8,11 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
+import family from '../assests/family.jpeg'
+import groceries from '../assests/groceries.png'
+import house from '../assests/homeCare.png'
+import util from '../assests/util.png'
+import reminder from '../assests/reminder.png'
 
 
 
@@ -181,13 +186,17 @@ const HomePage = () => {
     }
   };
 
+  // const handleLogout = () => {
+  //   localStorage.removeItem('username');
+  //   localStorage.removeItem('token');
+  //   localStorage.removeItem('flag')
+  //   localStorage.removeItem('role')
+  //   navigate('/',{ replace: true });
+  //   window.location.reload();
+  // };
   const handleLogout = () => {
-    localStorage.removeItem('username');
-    localStorage.removeItem('token');
-    localStorage.removeItem('flag')
-    localStorage.removeItem('role')
-    navigate('/',{ replace: true });
-    window.location.reload();
+    localStorage.clear();
+    window.location.href = '/';
   };
 
   const splitOutput = output.trim().split('\n');
@@ -217,7 +226,7 @@ const HomePage = () => {
             Hello, {username}
           </div>
           <div className="font-medium text-[16px]">
-           You are currently staying in
+        
           </div>
           <div className="grid grid-flow-row border-[1px] rounded-xl">
             <div className="grid grid-cols-2 border-b">
@@ -244,27 +253,27 @@ const HomePage = () => {
           <div className="grid grid-cols-2 gap-2">
             <Link to="/househelps">
               <div className="col-span-1 flex flex-col justify-center items-center px-3 border rounded-xl bg-white hover:bg-[#819b9b] gap-4 pb-4">
-                <img src={deviceControlIcon} alt="" className="w-10 h-10 " />
+                <img src={house} alt="" className="w-28 h-20 mt-4" />
                 <div className="text-sm font-base">Household Management</div>
               </div>
             </Link>
             <Link to="/Addfamily">
               <div className="col-span-1 flex flex-col justify-center items-center px-3 pt-2 border rounded-xl bg-white hover:bg-[#819b9b] gap-4 pb-4">
-                <img src={foodIcon} alt="" className="w-8 h-8 " />
+                <img src={family} alt="" className="w-20 h-20 mt-4 " />
                 <div className="text-sm font-base">Add Family</div>
               </div>
             </Link>
       
             <Link to="/groceries/out_of_stock">
               <div className="col-span-1 flex flex-col justify-center items-center px-3 pt-2 border rounded-xl bg-white hover:bg-[#819b9b] gap-4 pb-4">
-                <img src={miniBitesIcon} alt="" className="w-8 h-8 " />
+                <img src={groceries} alt="" className="w-20 h-20 mt-4  " />
                 <div className="text-sm font-base">Groceries</div>
               </div>
             </Link>
 
             <Link to="/utilities">
               <div className="col-span-1 flex flex-col justify-center items-center px-3 pt-2 border rounded-xl bg-white hover:bg-[#819b9b] gap-4 pb-4">
-                <img src={miniBitesIcon} alt="" className="w-8 h-8 " />
+                <img src={util} alt="" className="w-20 h-20 mt-4 " />
                 <div className="text-sm font-base">Utilities</div>
               </div>
             </Link>
@@ -272,18 +281,18 @@ const HomePage = () => {
 
             <Link to="/reminders">
               <div className="col-span-1 flex flex-col justify-center items-center px-3 pt-2 border rounded-xl bg-white hover:bg-[#819b9b] gap-4 pb-4">
-                <img src={miniBitesIcon} alt="" className="w-8 h-8 " />
+                <img src={reminder} alt="" className="w-20 h-20 mt-4  " />
                 <div className="text-sm font-base">Reminders</div>
               </div>
             </Link>
 
           </div>
-          <div className="flex justify-end items-end mt-8 mb-4" onClick={handleVoice}>
+          {/* <div className="flex justify-end items-end mt-8 mb-4" onClick={handleVoice}>
             <div className={`max-w-xs p-2`}>
               {output ? output : "Try saying 'what is last month energy consumption'"}
             </div>
             <img src={mic} alt="microphone" className="w-10 h-10" />
-          </div>
+          </div> */}
           
           {/* <div className="flex justify-end items-end mt-8 mb-4" onClick={handleVoice}>
             <div className={`max-w-xs p-2`}>

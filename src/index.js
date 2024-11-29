@@ -1,6 +1,7 @@
 import appStore from "./constants/appStore";
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
+import axios from "axios";
 import "./index.css";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
@@ -67,6 +68,65 @@ const Root = () => {
   const [isPortrait, setIsPortrait] = useState(
     window.innerWidth < window.innerHeight
   );
+
+
+  // const refreshToken = async () => {
+  //   try {
+  //     const refreshToken = localStorage.getItem('refreshToken');
+  //     if (!refreshToken) return;
+
+  //     const response = await axios.post(`${process.env.REACT_APP_API}/refresh`, {
+
+  //       refreshToken,
+  //     });
+
+  //     localStorage.setItem('token', response.data.token);
+  //   } catch (error) {
+  //     console.error('Failed to refresh token:', error);
+  //     localStorage.clear();
+  //     window.location.href = '/'; // Redirect to login on failure
+  //   }
+  // };
+
+  const refreshToken =  async () => {
+    try {
+    
+      const refreshToken = localStorage.getItem('refreshToken')
+     
+      if (!refreshToken) {
+        console.warn("No refresh token available.");
+        return;
+      }
+  
+      const response = await axios.post(
+        `${process.env.REACT_APP_API}/refresh`,
+        {}, 
+        {
+          headers: {
+            Authorization: `Bearer ${refreshToken}`,
+          },
+        }
+      );
+   
+      localStorage.setItem('token', response.data.token);
+      console.log("Access token refreshed.");
+    } catch (error) {
+      console.error("Failed to refresh token:", error.response?.data || error);
+      if (error.response?.status === 401) {
+        // Refresh token is invalid
+        localStorage.clear(); 
+        window.location.href = '/';
+      }
+    }
+  };
+
+
+  useEffect(() => {
+    refreshToken(); 
+  }, []);
+  
+
+
 
   useEffect(() => {
     const handleResize = () => {

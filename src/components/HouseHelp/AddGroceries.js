@@ -49,8 +49,24 @@ const AddGroceries = () => {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = '/';
+  };
+
   return (
     <div className="p-4">
+
+<div className="flex justify-between items-start mt-4">
+            <h2 className="font-semibold text-[18px]">My Home</h2>
+            <button 
+              onClick={handleLogout}
+              className="text-white bg-red-500 hover:bg-red-700 text-sm font-semibold py-1 px-2 rounded"
+            >
+              Logout
+            </button>
+          </div>
+
       <h1 className="text-2xl font-bold mb-4">Add Groceries</h1>
 
   

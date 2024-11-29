@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import leftArrowIcon from "../assests/leftArrow.svg";
+import { useNavigate } from 'react-router-dom';
 
 const OutOfStockGroceries = () => {
   const [outOfStockGroceries, setOutOfStockGroceries] = useState([]);
@@ -7,7 +9,7 @@ const OutOfStockGroceries = () => {
   const [loading, setLoading] = useState(true);
   const API = process.env.REACT_APP_API
   const token = localStorage.getItem('token');
- 
+  const navigate = useNavigate()
 
   useEffect(() => {
     fetchOutOfStockGroceries();
@@ -29,7 +31,7 @@ const OutOfStockGroceries = () => {
     });
   };
 
-  const handleLaterClick = (grocery) => {
+  const handleOrderClick = (grocery) => {
     
     axios.delete(`${API}/groceries/outofstock/delete`, {
       data: { _id: grocery._id },
@@ -45,17 +47,15 @@ const OutOfStockGroceries = () => {
     });
   };
 
-  const handleOrderClick = (grocery) => {
+  const handleLaterClick = (grocery) => {
  
     axios.put(`${API}/groceries/outofstock/update`, 
       { _id: grocery._id },
       { headers: { Authorization: `Bearer ${token}` } }
     )
     .then(() => {
-      console.log(`Ordered ${grocery.name}`);
-    
       setOutOfStockGroceries(outOfStockGroceries.map(item => 
-        item._id === grocery._id ? { ...item, status: 'ordered' } : item
+        item._id === grocery._id ? { ...item, status: 'Later' } : item
       ));
     })
     .catch((error) => {
@@ -66,9 +66,19 @@ const OutOfStockGroceries = () => {
   if (loading) {
     return <div>Loading...</div>;
   }
+  const handleBackButtonClick = () => {
+    navigate(-1);
+  };
 
   return (
     <div className="p-4">
+       <img
+        src={leftArrowIcon}
+        alt="Back"
+        onClick={handleBackButtonClick}
+        className="w-10 h-10 cursor-pointer mb-6 mr-80"
+      />
+
       <h1 className="text-2xl font-bold mb-4">Out of Stock Groceries</h1>
       
       {error && <div className="bg-red-200 text-red-700 p-2 rounded mb-4">{error}</div>}
