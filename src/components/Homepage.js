@@ -117,7 +117,7 @@ const HomePage = () => {
     
   
     try {
-      const response = await axios.get(`http://127.0.0.1:5052/getConsumption`, {
+      const response = await axios.get(`${API}/getConsumption`, {
         headers,
         params: { month, year }
       });
@@ -236,12 +236,13 @@ const HomePage = () => {
                 />
               </div>
               <div className="flex flex-col">
-                <div className="mt-2 px-6 col-span-1 flex flex-col justify-center border-b h-1/2">
-                  <div className="font-semibold text-[14px] ml-2">
-                    Flat No {homeDetails.flat}
+                <div className="mt-2 px-6 col-span-1 flex flex-col justify-center mt-20">
+                  <div className="font-semibold text-[24px] ml-2">
+                  {homeDetails.name}
                   </div>
                   <div className="font-light text-[14px] ml-2">
-                    {homeDetails.name}
+                   
+                    Flat No {homeDetails.flat}
                   </div>
                 </div>
               </div>

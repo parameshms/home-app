@@ -34,7 +34,7 @@ const Newspaper = () => {
   const fetchConsumptionData = async () => {
     const token = localStorage.getItem("token");
     try {
-      const response = await axios.get(`${API}/newspaper/last-three-months`, {
+      const response = await axios.get(`${API}/newspaper/last_three_months`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
