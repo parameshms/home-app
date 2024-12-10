@@ -13,6 +13,7 @@ import groceries from '../assests/groceries.png'
 import house from '../assests/house.jpg'
 import util from '../assests/util.png'
 import reminder from '../assests/reminder.png'
+import warranty from '../assests/warranty.webp'
 
 
 
@@ -283,6 +284,14 @@ const HomePage = () => {
               <div className="col-span-1 flex flex-col justify-center items-center px-3 pt-2 border rounded-xl bg-white hover:bg-[#819b9b] gap-4 pb-4">
                 <img src={reminder} alt="" className="w-20 h-20 mt-4  " />
                 <div className="text-sm font-base">Reminders</div>
+              </div>
+            </Link>
+
+            
+            <Link to="/warranties">
+              <div className="col-span-1 flex flex-col justify-center items-center px-3 pt-2 border rounded-xl bg-white hover:bg-[#819b9b] gap-4 pb-4">
+                <img src={warranty} alt="" className="w-34 h-20 mt-4  " />
+                <div className="text-sm font-base">Warranties</div>
               </div>
             </Link>
 
