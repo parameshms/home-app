@@ -1,8 +1,5 @@
 import roomImg from "../assests/roomImg.png";
 
-import miniBitesIcon from "../assests/miniBitesIcon.svg";
-import foodIcon from "../assests/foodIcon.svg";
-import deviceControlIcon from "../assests/deviceControlIcon.svg";
 import mic from "../assests/mic.png";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -13,7 +10,7 @@ import groceries from '../assests/groceries.png'
 import house from '../assests/house.jpg'
 import util from '../assests/util.png'
 import reminder from '../assests/reminder.png'
-import warranty from '../assests/warranty.webp'
+import warranty from '../assests/warranty.jpg'
 
 
 
