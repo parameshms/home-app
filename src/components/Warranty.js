@@ -27,7 +27,7 @@ export default function Warranty() {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${API}warranties/getData`,
+        `${API}/warranties/getData`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         }
@@ -63,7 +63,7 @@ export default function Warranty() {
       }
 
       const response = await axios.post(
-        `${API}warranties/addData`,
+        `${API}/warranties/addData`,
         formData,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -88,7 +88,7 @@ export default function Warranty() {
   const handleRemoveProduct = async (productId) => {
     try {
       const response = await axios.delete(
-        `${API}warranties/delete`,
+        `${API}/warranties/delete`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
           data: { product_id: productId },

@@ -1,9 +1,7 @@
 import { Link } from "react-router-dom";
 import leftArrowIcon from "../assests/leftArrow.svg";
-import menuIcon from "../assests/menuIcon.svg";
-import dineInIcon from "../assests/dineInIcon.svg";
+
 import bulb from "../assests/bulb.jpg"
-import reserveTableIcon from "../assests/reserveTableIcon.svg";
 import gas from "../assests/gas.png"
 import water from "../assests/water.jpg"
 import newspaper from "../assests/newspaper.jpg"

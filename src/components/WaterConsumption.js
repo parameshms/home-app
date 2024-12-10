@@ -5,12 +5,17 @@ import { BarChart } from "@mui/x-charts/BarChart";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import leftArrowIcon from "../assests/leftArrow.svg";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 const WaterConsumption = () => {
   const [consumptionData, setConsumptionData] = useState([]);
   const [graphData, setGraphData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
   const [showForm, setShowForm] = useState(false);
   const [newWaterData, setNewWaterData] = useState({
     readingDate: "",
@@ -53,16 +58,22 @@ const WaterConsumption = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.status === 201) {
-       
-        await fetchConsumptionData();
-        resetForm();
+        setSuccessMessage("Data added successfully!");
+        setSnackbarOpen(true);
         setShowForm(false);
+        resetForm();
+        await fetchConsumptionData();
+        
       } else {
         setError("Failed to add water consumption data.");
       }
     } catch (error) {
       setError("Error adding water consumption data.");
     }
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
   };
 
   const handleInputChange = (e) => {
@@ -250,6 +261,28 @@ const WaterConsumption = () => {
           {showForm ? "Close Form" : "Add New Water Data"}
         </Button>
       </div>
+
+      <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={handleSnackbarClose}
+        >
+          <Alert onClose={handleSnackbarClose} severity="success">
+            {successMessage}
+          </Alert>
+        </Snackbar>
+
+        {error && (
+          <Snackbar
+            open={!!error}
+            autoHideDuration={6000}
+            onClose={() => setError("")}
+          >
+            <Alert onClose={() => setError("")} severity="error">
+              {error}
+            </Alert>
+          </Snackbar>
+        )}
     </div>
   );
 };

@@ -149,7 +149,7 @@ const AddFamilyPage = () => {
       )}
       {familyMembers.length === 0 && members.length === 0 && (
   <div className="flex justify-center items-center w-full h-56 bg-gray-200 rounded-lg shadow-md mt-6">
-    <p className="text-gray-600 text-xl font-semibold">No data found</p>
+    <p className="text-gray-600 text-xl font-semibold">Family members not added</p>
   </div>
 )}
 

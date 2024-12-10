@@ -31,7 +31,7 @@ import GasConsumption from "./components/GasConsumption";
 import WaterConsumption from "./components/WaterConsumption";
 import Reminders from "./components/Reminders";
 import AddHousehelp from "./components/HouseHelp/AddHousehelp";
-import Warraties from "./components/Warranty";
+
 import Warranty from "./components/Warranty";
 
 const useAuth = () => {

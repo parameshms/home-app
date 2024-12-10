@@ -34,7 +34,7 @@ const Newspaper = () => {
   const fetchConsumptionData = async () => {
     const token = localStorage.getItem("token");
     try {
-      const response = await axios.get(`http://127.0.0.1:5052/newspaper/last-three-months`, {
+      const response = await axios.get(`${API}/newspaper/last-three-months`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -60,7 +60,7 @@ const Newspaper = () => {
     setError("");
     const token = localStorage.getItem("token");
     try {
-      const response = await axios.post(`http://127.0.0.1:5052/newspaper/add`, newData, {
+      const response = await axios.post(`${API}/newspaper/add`, newData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if(response.status === 201){
