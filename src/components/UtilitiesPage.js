@@ -6,6 +6,7 @@ import bulb from "../assests/bulb.jpg"
 import reserveTableIcon from "../assests/reserveTableIcon.svg";
 import gas from "../assests/gas.png"
 import water from "../assests/water.jpg"
+import newspaper from "../assests/newspaper.jpg"
 
 const OrderFoodPage = () => {
   const handleBackButtonClick = () => {
@@ -50,6 +51,16 @@ const OrderFoodPage = () => {
                 <img src={water} alt="" className="w-40 h-36" />
               </div>
             </Link>
+
+            <Link to="/newspaper">
+              <div className="flex justify-between items-center px-9 py-7 border-2 shadow-md rounded-xl bg-white hover:bg-[#819b9b]">
+                <div className="text-[18px] w-24 font-medium tracking-wider">
+                  Newspaper
+                </div>
+                <img src={newspaper} alt="" className="w-40 h-36" />
+              </div>
+            </Link>
+
           </div>
         </div>
       </div>
