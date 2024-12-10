@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
+import axios from "axios";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import {
@@ -68,6 +69,46 @@ const Root = () => {
   const [isPortrait, setIsPortrait] = useState(
     window.innerWidth < window.innerHeight
   );
+
+
+
+  const refreshToken =  async () => {
+    try {
+    
+      const refreshToken = localStorage.getItem('refreshToken')
+     
+      if (!refreshToken) {
+        console.warn("No refresh token available.");
+        return;
+      }
+  
+      const response = await axios.post(
+        `${process.env.REACT_APP_API}/refresh`,
+        {}, 
+        {
+          headers: {
+            Authorization: `Bearer ${refreshToken}`,
+          },
+        }
+      );
+   
+      localStorage.setItem('token', response.data.token);
+      console.log("Access token refreshed.");
+    } catch (error) {
+      console.error("Failed to refresh token:", error.response?.data || error);
+      if (error.response?.status === 401) {
+       
+        localStorage.clear(); 
+        window.location.href = '/';
+      }
+    }
+  };
+
+
+  useEffect(() => {
+    refreshToken(); 
+  }, []);
+
 
   useEffect(() => {
     const handleResize = () => {
