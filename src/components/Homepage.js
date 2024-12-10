@@ -18,6 +18,9 @@ import warranty from '../assests/warranty.jpg'
 const HomePage = () => { 
 
   const [showModal, setShowModal] = useState(false);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState("");
   const [output, setOutput] = useState("");
   const [socket, setSocket] = useState(null);
   const [homeDetails, setHomeDetails] = useState({}); 
@@ -26,6 +29,8 @@ const HomePage = () => {
   const navigate = useNavigate();
   const API = process.env.REACT_APP_API;
   
+
+
   useEffect(() => {
     const fetchHomeDetails = async () => {
       try {
@@ -44,6 +49,49 @@ const HomePage = () => {
   }, [token,API]);
 
 
+  const handleImageClick = () => {
+    setShowImageModal(true);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setSelectedImage(file);
+    setImagePreview(URL.createObjectURL(file));
+  };
+
+  const handleImageUpload = async () => {
+    if (!selectedImage) return;
+
+    const formData = new FormData();
+    formData.append("image", selectedImage);
+
+    try {
+      const response = await axios.put(`${API}/image/upload`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("Image uploaded successfully:", response.data);
+      setShowImageModal(false);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
+
+  const handleImageRemove = async () => {
+    try {
+      const response = await axios.delete(`${API}/image/delete`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log("Image removed successfully:", response.data);
+      setShowImageModal(false);
+    } catch (error) {
+      console.error("Error removing image:", error);
+    }
+  };
  
 
 
@@ -227,14 +275,74 @@ const HomePage = () => {
         
           </div>
           <div className="grid grid-flow-row border-[1px] rounded-xl">
-            <div className="grid grid-cols-2 border-b">
-              <div className="w-[189px] h-[189px]">
-                <img
-                  src={roomImg}
-                  alt=""
-                  className="rounded-l-xl col-span-1 w-[189px] h-[189px] object-cover object-center"
-                />
-              </div>
+          <div className="grid grid-cols-2 border-b">
+
+      <div className="flex flex-col items-center justify-center">
+
+           <div className="w-[189px] h-[189px] cursor-pointer relative group">
+               <img
+                   src={imagePreview || roomImg}
+                   alt="Home"
+                   className="rounded-xl w-full h-full object-cover object-center"
+                   onClick={handleImageClick}
+               />
+               <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                   <span className="text-white font-semibold">Update Image</span>
+               </div>
+           </div>
+
+           {showImageModal && (
+               <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                   <div className="bg-white rounded-lg p-6 shadow-lg w-[90%] max-w-md">
+                       <h2 className="text-lg font-bold text-center mb-4">Update Home Image</h2>
+                       {imagePreview && (
+                           <img
+                               src={imagePreview }
+                               alt="Preview"
+                               className="rounded-lg w-full h-48 object-cover mb-4"
+                           />
+                       )}
+                       <input
+                           type="file"
+                           accept="image/*"
+                           onChange={handleImageChange}
+                           className="block w-full text-sm text-gray-500 border border-gray-300 rounded-lg cursor-pointer mb-4"
+                       />
+                       <div className="flex justify-between">
+                           <button
+                               onClick={handleImageUpload}
+                               className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+                           >
+                               Upload
+                           </button>
+                           <button
+                               onClick={handleImageRemove}
+                               className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+                           >
+                               Remove
+                           </button>
+                           <button
+                               onClick={() => setShowImageModal(false)}
+                               className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition"
+                           >
+                               Cancel
+                           </button>
+                       </div>
+                   </div>
+               </div>
+           )}
+       </div>
+
+      
+  
+    
+         
+
+           
+    
+ 
+
+
               <div className="flex flex-col">
                 <div className="mt-2 px-6 col-span-1 flex flex-col justify-center mt-20">
                   <div className="font-semibold text-[24px] ml-2">
