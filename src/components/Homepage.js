@@ -105,7 +105,7 @@ const HomePage = () => {
     
       window.speechSynthesis.speak(utterance);
     } else {
-      console.error("Speech synthesis not supported in this browser.");
+      console.error("Speech synthesis not supported in this browser.....");
     }
   }
 
